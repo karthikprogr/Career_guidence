@@ -1,0 +1,170 @@
+.selection-page {
+  min-height: calc(100vh - 80px);
+  padding: 2rem 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.selection-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 3rem;
+}
+
+.selection-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.selection-header p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+}
+
+.selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.selection-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.selection-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+}
+
+.selection-card.selected {
+  border-color: var(--success-color);
+  background: #f0fdf4;
+}
+
+.selection-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.selection-card h3 {
+  font-size: 1.5rem;
+  color: var(--dark-color);
+  margin-bottom: 0.5rem;
+}
+
+.selection-card p {
+  color: var(--text-color);
+}
+
+.check-mark {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  background: var(--success-color);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.location-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.location-card {
+  background: white;
+  padding: 3rem 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.location-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+}
+
+.location-card.selected {
+  border-color: var(--success-color);
+  background: #f0fdf4;
+}
+
+.location-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
+
+.location-card h2 {
+  font-size: 2rem;
+  color: var(--dark-color);
+  margin-bottom: 0.5rem;
+}
+
+.location-desc {
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
+}
+
+.location-highlights {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.location-highlights li {
+  padding: 0.5rem 0;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.selection-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.selection-actions .btn {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .selection-header h1 {
+    font-size: 2rem;
+  }
+  
+  .selection-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .location-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .selection-actions {
+    flex-direction: column;
+  }
+}

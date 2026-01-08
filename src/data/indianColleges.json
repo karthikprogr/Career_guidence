@@ -1,0 +1,61 @@
+[
+  {"name": "Indian Institute of Technology Bombay", "location": "Mumbai, Maharashtra", "type": "Engineering", "fees": 200000, "ranking": 1, "minCGPA": 8.5, "placementRate": 95, "web_pages": ["https://www.iitb.ac.in"]},
+  {"name": "Indian Institute of Technology Delhi", "location": "New Delhi, Delhi", "type": "Engineering", "fees": 200000, "ranking": 2, "minCGPA": 8.5, "placementRate": 94, "web_pages": ["https://www.iitd.ac.in"]},
+  {"name": "Indian Institute of Technology Madras", "location": "Chennai, Tamil Nadu", "type": "Engineering", "fees": 200000, "ranking": 3, "minCGPA": 8.5, "placementRate": 93, "web_pages": ["https://www.iitm.ac.in"]},
+  {"name": "Indian Institute of Technology Kanpur", "location": "Kanpur, Uttar Pradesh", "type": "Engineering", "fees": 200000, "ranking": 4, "minCGPA": 8.5, "placementRate": 92, "web_pages": ["https://www.iitk.ac.in"]},
+  {"name": "Indian Institute of Technology Kharagpur", "location": "Kharagpur, West Bengal", "type": "Engineering", "fees": 200000, "ranking": 5, "minCGPA": 8.5, "placementRate": 91, "web_pages": ["https://www.iitkgp.ac.in"]},
+  {"name": "Indian Institute of Technology Roorkee", "location": "Roorkee, Uttarakhand", "type": "Engineering", "fees": 200000, "ranking": 6, "minCGPA": 8.5, "placementRate": 90, "web_pages": ["https://www.iitr.ac.in"]},
+  {"name": "National Institute of Technology Tiruchirappalli", "location": "Tiruchirappalli, Tamil Nadu", "type": "Engineering", "fees": 150000, "ranking": 9, "minCGPA": 8.0, "placementRate": 87, "web_pages": ["https://www.nitt.edu"]},
+  {"name": "Birla Institute of Technology and Science Pilani", "location": "Pilani, Rajasthan", "type": "Engineering", "fees": 450000, "ranking": 11, "minCGPA": 8.0, "placementRate": 85, "web_pages": ["https://www.bits-pilani.ac.in"]},
+  {"name": "Vellore Institute of Technology", "location": "Vellore, Tamil Nadu", "type": "Engineering", "fees": 195000, "ranking": 12, "minCGPA": 7.5, "placementRate": 84, "web_pages": ["https://www.vit.ac.in"]},
+  {"name": "Delhi Technological University", "location": "Delhi, Delhi", "type": "Engineering", "fees": 100000, "ranking": 15, "minCGPA": 7.5, "placementRate": 83, "web_pages": ["https://www.dtu.ac.in"]},
+  {"name": "Anna University", "location": "Chennai, Tamil Nadu", "type": "Engineering", "fees": 75000, "ranking": 20, "minCGPA": 7.0, "placementRate": 80, "web_pages": ["https://www.annauniv.edu"]},
+  
+  {"name": "Indian Institute of Management Ahmedabad", "location": "Ahmedabad, Gujarat", "type": "Management", "fees": 2300000, "ranking": 1, "minCGPA": 8.5, "placementRate": 98, "web_pages": ["https://www.iima.ac.in"]},
+  {"name": "Indian Institute of Management Bangalore", "location": "Bangalore, Karnataka", "type": "Management", "fees": 2400000, "ranking": 2, "minCGPA": 8.5, "placementRate": 98, "web_pages": ["https://www.iimb.ac.in"]},
+  {"name": "Indian Institute of Management Calcutta", "location": "Kolkata, West Bengal", "type": "Management", "fees": 2700000, "ranking": 3, "minCGPA": 8.5, "placementRate": 97, "web_pages": ["https://www.iimcal.ac.in"]},
+  {"name": "Xavier Labour Relations Institute", "location": "Jamshedpur, Jharkhand", "type": "Management", "fees": 2500000, "ranking": 4, "minCGPA": 8.0, "placementRate": 96, "web_pages": ["https://www.xlri.ac.in"]},
+  {"name": "Faculty of Management Studies Delhi", "location": "Delhi, Delhi", "type": "Management", "fees": 200000, "ranking": 5, "minCGPA": 8.0, "placementRate": 95, "web_pages": ["https://www.fms.edu"]},
+  {"name": "SP Jain Institute of Management and Research", "location": "Mumbai, Maharashtra", "type": "Management", "fees": 1750000, "ranking": 6, "minCGPA": 7.5, "placementRate": 94, "web_pages": ["https://www.spjimr.org"]},
+  {"name": "Management Development Institute Gurgaon", "location": "Gurgaon, Haryana", "type": "Management", "fees": 2100000, "ranking": 7, "minCGPA": 7.5, "placementRate": 93, "web_pages": ["https://www.mdi.ac.in"]},
+  
+  {"name": "All India Institute of Medical Sciences Delhi", "location": "New Delhi, Delhi", "type": "Medical", "fees": 7000, "ranking": 1, "minCGPA": 9.0, "placementRate": 100, "web_pages": ["https://www.aiims.edu"]},
+  {"name": "Post Graduate Institute of Medical Education and Research", "location": "Chandigarh, Punjab", "type": "Medical", "fees": 25000, "ranking": 2, "minCGPA": 8.8, "placementRate": 99, "web_pages": ["https://www.pgimer.edu.in"]},
+  {"name": "Christian Medical College Vellore", "location": "Vellore, Tamil Nadu", "type": "Medical", "fees": 100000, "ranking": 3, "minCGPA": 8.7, "placementRate": 98, "web_pages": ["https://www.cmch-vellore.edu"]},
+  {"name": "Sanjay Gandhi Postgraduate Institute of Medical Sciences", "location": "Lucknow, Uttar Pradesh", "type": "Medical", "fees": 20000, "ranking": 4, "minCGPA": 8.6, "placementRate": 97, "web_pages": ["https://www.sgpgi.ac.in"]},
+  {"name": "Kasturba Medical College Manipal", "location": "Manipal, Karnataka", "type": "Medical", "fees": 4500000, "ranking": 5, "minCGPA": 8.5, "placementRate": 96, "web_pages": ["https://www.manipal.edu"]},
+  {"name": "Armed Forces Medical College", "location": "Pune, Maharashtra", "type": "Medical", "fees": 10000, "ranking": 6, "minCGPA": 8.7, "placementRate": 98, "web_pages": ["https://www.afmc.nic.in"]},
+  {"name": "Maulana Azad Medical College", "location": "New Delhi, Delhi", "type": "Medical", "fees": 5000, "ranking": 7, "minCGPA": 8.5, "placementRate": 95, "web_pages": ["https://www.mamc.ac.in"]},
+  
+  {"name": "National Law School of India University", "location": "Bangalore, Karnataka", "type": "Law", "fees": 250000, "ranking": 1, "minCGPA": 8.0, "placementRate": 95, "web_pages": ["https://www.nls.ac.in"]},
+  {"name": "National Law University Delhi", "location": "New Delhi, Delhi", "type": "Law", "fees": 200000, "ranking": 2, "minCGPA": 7.8, "placementRate": 93, "web_pages": ["https://www.nludelhi.ac.in"]},
+  {"name": "NALSAR University of Law", "location": "Hyderabad, Telangana", "type": "Law", "fees": 180000, "ranking": 3, "minCGPA": 7.7, "placementRate": 92, "web_pages": ["https://www.nalsar.ac.in"]},
+  {"name": "West Bengal National University of Juridical Sciences", "location": "Kolkata, West Bengal", "type": "Law", "fees": 175000, "ranking": 4, "minCGPA": 7.6, "placementRate": 90, "web_pages": ["https://www.nujs.edu"]},
+  {"name": "Gujarat National Law University", "location": "Gandhinagar, Gujarat", "type": "Law", "fees": 165000, "ranking": 5, "minCGPA": 7.5, "placementRate": 89, "web_pages": ["https://www.gnlu.ac.in"]},
+  {"name": "Symbiosis Law School Pune", "location": "Pune, Maharashtra", "type": "Law", "fees": 350000, "ranking": 6, "minCGPA": 7.3, "placementRate": 87, "web_pages": ["https://www.symlaw.ac.in"]},
+  
+  {"name": "Indian Institute of Science Bangalore", "location": "Bangalore, Karnataka", "type": "Science", "fees": 300000, "ranking": 1, "minCGPA": 9.0, "placementRate": 96, "web_pages": ["https://www.iisc.ac.in"]},
+  {"name": "Tata Institute of Fundamental Research", "location": "Mumbai, Maharashtra", "type": "Science", "fees": 100000, "ranking": 2, "minCGPA": 8.8, "placementRate": 94, "web_pages": ["https://www.tifr.res.in"]},
+  {"name": "Indian Institute of Science Education and Research Pune", "location": "Pune, Maharashtra", "type": "Science", "fees": 50000, "ranking": 3, "minCGPA": 8.5, "placementRate": 91, "web_pages": ["https://www.iiserpune.ac.in"]},
+  {"name": "Indian Statistical Institute Kolkata", "location": "Kolkata, West Bengal", "type": "Science", "fees": 75000, "ranking": 4, "minCGPA": 8.4, "placementRate": 90, "web_pages": ["https://www.isical.ac.in"]},
+  {"name": "St. Stephen's College", "location": "New Delhi, Delhi", "type": "Science", "fees": 50000, "ranking": 5, "minCGPA": 7.8, "placementRate": 85, "web_pages": ["https://www.ststephens.edu"]},
+  {"name": "Presidency College Chennai", "location": "Chennai, Tamil Nadu", "type": "Science", "fees": 25000, "ranking": 6, "minCGPA": 7.5, "placementRate": 82, "web_pages": ["https://www.presidencycollege.ac.in"]},
+  
+  {"name": "Jawaharlal Nehru University", "location": "New Delhi, Delhi", "type": "Arts", "fees": 30000, "ranking": 1, "minCGPA": 7.5, "placementRate": 75, "web_pages": ["https://www.jnu.ac.in"]},
+  {"name": "University of Delhi", "location": "New Delhi, Delhi", "type": "Arts", "fees": 25000, "ranking": 2, "minCGPA": 7.0, "placementRate": 73, "web_pages": ["https://www.du.ac.in"]},
+  {"name": "Banaras Hindu University", "location": "Varanasi, Uttar Pradesh", "type": "Arts", "fees": 35000, "ranking": 3, "minCGPA": 6.8, "placementRate": 71, "web_pages": ["https://www.bhu.ac.in"]},
+  {"name": "Jadavpur University", "location": "Kolkata, West Bengal", "type": "Arts", "fees": 30000, "ranking": 4, "minCGPA": 6.8, "placementRate": 70, "web_pages": ["https://www.jadavpuruniversity.in"]},
+  
+  {"name": "Lady Shri Ram College for Women", "location": "New Delhi, Delhi", "type": "Commerce", "fees": 40000, "ranking": 1, "minCGPA": 8.0, "placementRate": 88, "web_pages": ["https://www.lsr.edu.in"]},
+  {"name": "Shri Ram College of Commerce", "location": "New Delhi, Delhi", "type": "Commerce", "fees": 45000, "ranking": 2, "minCGPA": 8.2, "placementRate": 90, "web_pages": ["https://www.srcc.edu"]},
+  {"name": "Hindu College Delhi", "location": "New Delhi, Delhi", "type": "Commerce", "fees": 35000, "ranking": 3, "minCGPA": 7.5, "placementRate": 85, "web_pages": ["https://www.hinducollege.ac.in"]},
+  {"name": "Christ University Bangalore", "location": "Bangalore, Karnataka", "type": "Commerce", "fees": 200000, "ranking": 4, "minCGPA": 7.3, "placementRate": 83, "web_pages": ["https://www.christuniversity.in"]},
+  
+  {"name": "National Institute of Fashion Technology Delhi", "location": "New Delhi, Delhi", "type": "Design", "fees": 350000, "ranking": 1, "minCGPA": 7.0, "placementRate": 80, "web_pages": ["https://www.nift.ac.in"]},
+  {"name": "National Institute of Design Ahmedabad", "location": "Ahmedabad, Gujarat", "type": "Design", "fees": 300000, "ranking": 2, "minCGPA": 7.2, "placementRate": 82, "web_pages": ["https://www.nid.edu"]},
+  {"name": "Indian Institute of Crafts and Design", "location": "Jaipur, Rajasthan", "type": "Design", "fees": 275000, "ranking": 3, "minCGPA": 6.8, "placementRate": 78, "web_pages": ["https://www.iicd.ac.in"]},
+  
+  {"name": "Film and Television Institute of India", "location": "Pune, Maharashtra", "type": "Media", "fees": 100000, "ranking": 1, "minCGPA": 6.5, "placementRate": 75, "web_pages": ["https://www.ftii.ac.in"]},
+  {"name": "Satyajit Ray Film and Television Institute", "location": "Kolkata, West Bengal", "type": "Media", "fees": 85000, "ranking": 2, "minCGPA": 6.3, "placementRate": 72, "web_pages": ["https://www.srfti.gov.in"]},
+  {"name": "Indian Institute of Mass Communication", "location": "New Delhi, Delhi", "type": "Media", "fees": 75000, "ranking": 3, "minCGPA": 6.5, "placementRate": 73, "web_pages": ["https://www.iimc.gov.in"]}
+]

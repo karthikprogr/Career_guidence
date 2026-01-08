@@ -1,0 +1,167 @@
+.college-details-page {
+  min-height: calc(100vh - 80px);
+  padding: 2rem 0;
+  background-color: var(--light-color);
+}
+
+.back-btn {
+  margin-bottom: 1.5rem;
+}
+
+.college-details-card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.college-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  padding: 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.college-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.college-location {
+  font-size: 1.125rem;
+  opacity: 0.9;
+}
+
+.college-rank {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.college-rank span {
+  display: block;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.college-rank strong {
+  font-size: 2rem;
+}
+
+.eligibility-banner {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.eligibility-banner.eligible {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.eligibility-banner.not-eligible {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-icon {
+  font-size: 1.5rem;
+}
+
+.quick-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem 2.5rem;
+  background: var(--light-color);
+}
+
+.info-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 0.5rem;
+}
+
+.info-icon {
+  font-size: 2rem;
+}
+
+.info-label {
+  font-size: 0.875rem;
+  color: var(--text-color);
+  margin-bottom: 0.25rem;
+}
+
+.info-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--dark-color);
+}
+
+.college-section {
+  padding: 2rem 2.5rem;
+  border-bottom: 1px solid var(--light-color);
+}
+
+.college-section:last-child {
+  border-bottom: none;
+}
+
+.college-section h2 {
+  font-size: 1.5rem;
+  color: var(--dark-color);
+  margin-bottom: 1rem;
+}
+
+.college-section p {
+  color: var(--text-color);
+  line-height: 1.8;
+}
+
+.registration-section ol {
+  padding-left: 1.5rem;
+  color: var(--text-color);
+  line-height: 2;
+}
+
+.registration-section .alert {
+  margin-top: 1rem;
+}
+
+.action-section {
+  padding: 2rem 2.5rem;
+  text-align: center;
+}
+
+.btn-large {
+  padding: 1rem 3rem;
+  font-size: 1.125rem;
+}
+
+@media (max-width: 768px) {
+  .college-header {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .college-header h1 {
+    font-size: 2rem;
+  }
+  
+  .quick-info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .college-section {
+    padding: 1.5rem;
+  }
+}

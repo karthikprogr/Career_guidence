@@ -1,0 +1,106 @@
+.college-list-page {
+  min-height: calc(100vh - 80px);
+  padding: 2rem 0;
+  background-color: var(--light-color);
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 2.5rem;
+  color: var(--dark-color);
+  margin-bottom: 0.5rem;
+}
+
+.page-header p {
+  font-size: 1.125rem;
+  color: var(--text-color);
+}
+
+.eligibility-info {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--primary-color);
+}
+
+.eligibility-info h3 {
+  color: var(--dark-color);
+  margin-bottom: 1rem;
+}
+
+.eligibility-info p {
+  color: var(--text-color);
+  margin: 0.5rem 0;
+}
+
+.eligibility-info strong {
+  color: var(--primary-color);
+}
+
+.filters-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+}
+
+.filters-section h3 {
+  color: var(--dark-color);
+  margin-bottom: 1rem;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.filters-grid .form-group {
+  margin-bottom: 0;
+}
+
+.colleges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow);
+}
+
+.no-results h3 {
+  font-size: 1.5rem;
+  color: var(--dark-color);
+  margin-bottom: 1rem;
+}
+
+.no-results p {
+  color: var(--text-color);
+  font-size: 1.125rem;
+}
+
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 2rem;
+  }
+  
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .colleges-grid {
+    grid-template-columns: 1fr;
+  }
+}

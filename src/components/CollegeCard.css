@@ -1,0 +1,64 @@
+.college-card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.college-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.college-card-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.college-card-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.college-ranking {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.college-card-body {
+  padding: 1.5rem;
+}
+
+.college-info {
+  margin-bottom: 1rem;
+}
+
+.college-info p {
+  margin: 0.5rem 0;
+  color: var(--text-color);
+}
+
+.college-placement {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--light-color);
+  border-radius: 0.375rem;
+}
+
+.college-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.college-actions .btn {
+  flex: 1;
+}
