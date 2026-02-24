@@ -91,6 +91,52 @@
   font-size: 1.125rem;
 }
 
+.comparison-toolbar {
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1rem;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -4px 12px rgba(102, 126, 234, 0.3);
+  margin-top: 2rem;
+  z-index: 100;
+}
+
+.toolbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.selection-count {
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.college-card-wrapper {
+  position: relative;
+}
+
+.compare-checkbox {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  z-index: 10;
+  accent-color: #667eea;
+  transform: scale(1.3);
+}
+
 @media (max-width: 768px) {
   .page-header h1 {
     font-size: 2rem;
@@ -103,4 +149,19 @@
   .colleges-grid {
     grid-template-columns: 1fr;
   }
+
+  .toolbar-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .toolbar-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .toolbar-actions .btn {
+    width: 100%;
+  }
 }
+

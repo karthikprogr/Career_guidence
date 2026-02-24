@@ -1,9 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { logInfo, logError, logSuccess } from '../logger';
 import { generateQuestions, isGeminiAvailable } from '../services/geminiAPI';
-import { getAvailableCountries, searchColleges } from '../services/collegeAPI';
+import { 
+  getAvailableCountries, 
+  searchColleges, 
+  fetchCollegesByCountry,
+  fetchWorldwideColleges 
+} from '../services/collegeAPI';
+import addSampleColleges from '../utils/addSampleColleges';
+import { 
+  GraduationCapIcon, 
+  DocumentIcon, 
+  FileTextIcon,
+  EditIcon, 
+  TrashIcon, 
+  CheckIcon, 
+  CloseIcon,
+  TrophyIcon, 
+  LocationIcon, 
+  MoneyIcon, 
+  ChartIcon,
+  PhoneIcon, 
+  MailIcon, 
+  GlobeIcon, 
+  LinkIcon,
+  ClockIcon,
+  PlusIcon,
+  DownloadIcon,
+  BuildingIcon,
+  BookOpenIcon,
+  AwardIcon
+} from '../components/Icons';
 import './AdminDashboard.css';
 import '../components/Modals.css';
 
@@ -11,6 +40,7 @@ function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('colleges');
   const [colleges, setColleges] = useState([]);
   const [questions, setQuestions] = useState([]);
+  const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
@@ -43,15 +73,28 @@ function AdminDashboard() {
   // College form state
   const [collegeForm, setCollegeForm] = useState({
     name: '',
-    location: '',
+    country: 'India',
+    state: '',
+    city: '',
+    address: '',
     type: '',
     fees: '',
+    currency: 'INR',
     ranking: '',
     minCGPA: '',
     placementRate: '',
     description: '',
     facilities: '',
-    scholarships: ''
+    scholarships: '',
+    website: '',
+    email: '',
+    phone: '',
+    establishedYear: '',
+    accreditation: '',
+    coursesOffered: '',
+    campusSize: '',
+    studentCount: '',
+    facultyCount: ''
   });
 
   // Question form state
@@ -68,6 +111,8 @@ function AdminDashboard() {
       fetchColleges();
     } else if (activeTab === 'questions') {
       fetchQuestions();
+    } else if (activeTab === 'applications') {
+      fetchApplications();
     }
     
     // Check if Gemini API is available
@@ -108,6 +153,71 @@ function AdminDashboard() {
     }
   };
 
+  const fetchApplications = async () => {
+    setLoading(true);
+    try {
+      const querySnapshot = await getDocs(collection(db, 'applications'));
+      const appsData = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        appliedAt: doc.data().appliedAt?.toDate()
+      }));
+      // Sort by most recent first
+      appsData.sort((a, b) => b.appliedAt - a.appliedAt);
+      setApplications(appsData);
+      logInfo('ADMIN', 'Applications fetched', { count: appsData.length });
+    } catch (error) {
+      logError('ADMIN', 'Failed to fetch applications', { error: error.message });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetCollegeForm = () => {
+    setCollegeForm({
+      name: '',
+      country: 'India',
+      state: '',
+      city: '',
+      address: '',
+      type: '',
+      fees: '',
+      currency: 'INR',
+      ranking: '',
+      minCGPA: '',
+      placementRate: '',
+      description: '',
+      facilities: '',
+      scholarships: '',
+      website: '',
+      email: '',
+      phone: '',
+      establishedYear: '',
+      accreditation: '',
+      coursesOffered: '',
+      campusSize: '',
+      studentCount: '',
+      facultyCount: ''
+    });
+  };
+
+  const handleUpdateApplicationStatus = async (applicationId, status, remarks = '') => {
+    try {
+      await updateDoc(doc(db, 'applications', applicationId), {
+        status: status,
+        adminRemarks: remarks,
+        updatedAt: serverTimestamp(),
+        reviewedBy: auth.currentUser.uid
+      });
+      logSuccess('ADMIN', 'Application status updated', { applicationId, status });
+      fetchApplications(); // Refresh
+      alert(`Application ${status} successfully!`);
+    } catch (error) {
+      logError('ADMIN', 'Failed to update application status', { error: error.message });
+      alert('Failed to update application status. Please try again.');
+    }
+  };
+
   const handleAddCollege = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -115,30 +225,23 @@ function AdminDashboard() {
     try {
       const collegeData = {
         ...collegeForm,
-        fees: parseFloat(collegeForm.fees),
-        ranking: parseInt(collegeForm.ranking),
-        minCGPA: parseFloat(collegeForm.minCGPA),
-        placementRate: parseFloat(collegeForm.placementRate),
+        fees: parseFloat(collegeForm.fees) || 0,
+        ranking: parseInt(collegeForm.ranking) || 0,
+        minCGPA: parseFloat(collegeForm.minCGPA) || 0,
+        placementRate: parseFloat(collegeForm.placementRate) || 0,
+        establishedYear: collegeForm.establishedYear ? parseInt(collegeForm.establishedYear) : null,
+        studentCount: collegeForm.studentCount ? parseInt(collegeForm.studentCount) : null,
+        facultyCount: collegeForm.facultyCount ? parseInt(collegeForm.facultyCount) : null,
+        location: `${collegeForm.city}, ${collegeForm.state}, ${collegeForm.country}`.replace(/^,\s*|,\s*,/g, ',').replace(/^,|,$/g, '').trim(),
         createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
         createdBy: auth.currentUser.uid
       };
 
       await addDoc(collection(db, 'colleges'), collegeData);
       logSuccess('ADMIN', 'College added successfully', { collegeName: collegeForm.name });
       
-      // Reset form
-      setCollegeForm({
-        name: '',
-        location: '',
-        type: '',
-        fees: '',
-        ranking: '',
-        minCGPA: '',
-        placementRate: '',
-        description: '',
-        facilities: '',
-        scholarships: ''
-      });
+      resetCollegeForm();
       setShowForm(false);
       fetchColleges();
     } catch (error) {
@@ -152,16 +255,29 @@ function AdminDashboard() {
   const handleEditCollege = (college) => {
     setEditingCollege(college.id);
     setCollegeForm({
-      name: college.name,
-      location: college.location,
-      type: college.type,
-      fees: college.fees.toString(),
-      ranking: college.ranking.toString(),
-      minCGPA: college.minCGPA.toString(),
-      placementRate: college.placementRate.toString(),
+      name: college.name || '',
+      country: college.country || 'India',
+      state: college.state || '',
+      city: college.city || '',
+      address: college.address || '',
+      type: college.type || '',
+      fees: college.fees?.toString() || '',
+      currency: college.currency || 'INR',
+      ranking: college.ranking?.toString() || '',
+      minCGPA: college.minCGPA?.toString() || '',
+      placementRate: college.placementRate?.toString() || '',
       description: college.description || '',
       facilities: college.facilities || '',
-      scholarships: college.scholarships || ''
+      scholarships: college.scholarships || '',
+      website: college.website || '',
+      email: college.email || '',
+      phone: college.phone || '',
+      establishedYear: college.establishedYear?.toString() || '',
+      accreditation: college.accreditation || '',
+      coursesOffered: college.coursesOffered || '',
+      campusSize: college.campusSize || '',
+      studentCount: college.studentCount?.toString() || '',
+      facultyCount: college.facultyCount?.toString() || ''
     });
     setShowForm(true);
   };
@@ -173,10 +289,14 @@ function AdminDashboard() {
     try {
       const collegeData = {
         ...collegeForm,
-        fees: parseFloat(collegeForm.fees),
-        ranking: parseInt(collegeForm.ranking),
-        minCGPA: parseFloat(collegeForm.minCGPA),
-        placementRate: parseFloat(collegeForm.placementRate),
+        fees: parseFloat(collegeForm.fees) || 0,
+        ranking: parseInt(collegeForm.ranking) || 0,
+        minCGPA: parseFloat(collegeForm.minCGPA) || 0,
+        placementRate: parseFloat(collegeForm.placementRate) || 0,
+        establishedYear: collegeForm.establishedYear ? parseInt(collegeForm.establishedYear) : null,
+        studentCount: collegeForm.studentCount ? parseInt(collegeForm.studentCount) : null,
+        facultyCount: collegeForm.facultyCount ? parseInt(collegeForm.facultyCount) : null,
+        location: `${collegeForm.city}, ${collegeForm.state}, ${collegeForm.country}`.replace(/^,\s*|,\s*,/g, ',').replace(/^,|,$/g, '').trim(),
         updatedAt: serverTimestamp(),
         updatedBy: auth.currentUser.uid
       };
@@ -184,19 +304,7 @@ function AdminDashboard() {
       await updateDoc(doc(db, 'colleges', editingCollege), collegeData);
       logSuccess('ADMIN', 'College updated successfully', { collegeId: editingCollege, collegeName: collegeForm.name });
       
-      // Reset form
-      setCollegeForm({
-        name: '',
-        location: '',
-        type: '',
-        fees: '',
-        ranking: '',
-        minCGPA: '',
-        placementRate: '',
-        description: '',
-        facilities: '',
-        scholarships: ''
-      });
+      resetCollegeForm();
       setEditingCollege(null);
       setShowForm(false);
       fetchColleges();
@@ -313,17 +421,20 @@ function AdminDashboard() {
 
   // College API Import Functions
   const handleSearchColleges = async () => {
-    if (!collegeSearchTerm.trim()) {
-      alert('Please enter a search term');
-      return;
-    }
-
     setApiLoading(true);
     try {
-      const results = await searchColleges(collegeSearchTerm, selectedCountry);
+      let results;
+      if (collegeSearchTerm.trim()) {
+        // Search with term
+        results = await searchColleges(collegeSearchTerm, selectedCountry);
+      } else {
+        // Fetch all colleges from selected country
+        results = await fetchCollegesByCountry(selectedCountry, 50);
+      }
+      
       setCollegeSearchResults(results);
       logInfo('ADMIN', 'College search completed', { 
-        searchTerm: collegeSearchTerm, 
+        searchTerm: collegeSearchTerm || 'all', 
         country: selectedCountry,
         resultsCount: results.length 
       });
@@ -334,6 +445,72 @@ function AdminDashboard() {
     } catch (error) {
       logError('ADMIN', 'College search failed', { error: error.message });
       alert('Failed to search colleges. Please try again.');
+    } finally {
+      setApiLoading(false);
+    }
+  };
+
+  const handleBulkImportWorldwide = async () => {
+    const confirmed = window.confirm(
+      'This will fetch and import colleges from 16 major countries worldwide (up to 480 colleges). This may take a few minutes. Continue?'
+    );
+    
+    if (!confirmed) return;
+
+    setApiLoading(true);
+    try {
+      const colleges = await fetchWorldwideColleges();
+      
+      // Use batch writes for better performance
+      const batch = writeBatch(db);
+      colleges.forEach(college => {
+        const docRef = doc(collection(db, 'colleges'));
+        batch.set(docRef, {
+          ...college,
+          createdAt: serverTimestamp(),
+          createdBy: auth.currentUser.uid,
+          source: 'Worldwide Import'
+        });
+      });
+      
+      await batch.commit();
+      
+      logSuccess('ADMIN', 'Worldwide colleges imported', { count: colleges.length });
+      alert(`Successfully imported ${colleges.length} colleges from around the world!`);
+      
+      setShowCollegeImportModal(false);
+      fetchColleges();
+    } catch (error) {
+      logError('ADMIN', 'Worldwide import failed', { error: error.message });
+      alert('Failed to import worldwide colleges. Please try again.');
+    } finally {
+      setApiLoading(false);
+    }
+  };
+
+  const handleAddSampleColleges = async () => {
+    const confirmed = window.confirm(
+      'This will add 15 sample colleges from India covering Engineering, Management, Medical, Law, Science, and Arts programs. Continue?'
+    );
+    
+    if (!confirmed) return;
+
+    setApiLoading(true);
+    try {
+      const result = await addSampleColleges();
+      
+      logSuccess('ADMIN', 'Sample colleges added', { 
+        successCount: result.successCount,
+        errorCount: result.errorCount 
+      });
+      
+      alert(`Successfully added ${result.successCount} sample colleges!${result.errorCount > 0 ? `\n${result.errorCount} failed to add.` : ''}`);
+      
+      fetchColleges();
+    } catch (error) {
+      logError('ADMIN', 'Failed to add sample colleges', { error: error.message });
+      alert('Failed to add sample colleges. Please check console for details.');
+      console.error('Sample colleges error:', error);
     } finally {
       setApiLoading(false);
     }
@@ -468,6 +645,15 @@ function AdminDashboard() {
           >
             Aptitude Questions
           </button>
+          <button
+            className={`tab ${activeTab === 'applications' ? 'tab-active' : ''}`}
+            onClick={() => {
+              setActiveTab('applications');
+              setShowForm(false);
+            }}
+          >
+            Applications ({applications.length})
+          </button>
         </div>
 
         {/* Colleges Tab */}
@@ -475,7 +661,7 @@ function AdminDashboard() {
           <div className="tab-content">
             <div className="tab-header">
               <h2>Colleges ({colleges.length})</h2>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                 <button
                   className="btn btn-primary"
                   onClick={() => setShowForm(!showForm)}
@@ -483,163 +669,401 @@ function AdminDashboard() {
                   {showForm ? 'Cancel' : '+ Add Manually'}
                 </button>
                 <button
+                  className="btn btn-info"
+                  onClick={handleAddSampleColleges}
+                  style={{ backgroundColor: '#3b82f6' }}
+                  disabled={apiLoading}
+                >
+                  <PlusIcon size={18} /> Add Sample Colleges
+                </button>
+                <button
                   className="btn btn-success"
                   onClick={() => setShowCollegeImportModal(true)}
                   style={{ backgroundColor: '#10b981' }}
+                  disabled={apiLoading}
                 >
-                  🌐 Import from API
+                  <GlobeIcon size={18} /> Import from API
                 </button>
               </div>
             </div>
 
             {showForm && (
               <div className="card form-card">
-                <h3>{editingCollege ? 'Edit College' : 'Add New College'}</h3>
+                <h3>
+                  {editingCollege ? (
+                    <><EditIcon size={20} /> Edit College</>
+                  ) : (
+                    <><GraduationCapIcon size={20} /> Add New College</>
+                  )}
+                </h3>
                 <form onSubmit={editingCollege ? handleUpdateCollege : handleAddCollege}>
-                  <div className="grid grid-2">
-                    <div className="form-group">
-                      <label className="form-label">College Name *</label>
-                      <input
-                        type="text"
-                        className="form-input"
-                        value={collegeForm.name}
-                        onChange={(e) => setCollegeForm({ ...collegeForm, name: e.target.value })}
-                        required
-                      />
-                    </div>
+                  
+                  {/* Basic Information Section */}
+                  <div className="form-section">
+                    <h4 className="section-title">
+                      <FileTextIcon size={18} /> Basic Information
+                    </h4>
+                    <div className="grid grid-3">
+                      <div className="form-group">
+                        <label className="form-label">College Name *</label>
+                        <input
+                          type="text"
+                          className="form-input"
+                          value={collegeForm.name}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, name: e.target.value })}
+                          placeholder="e.g., Massachusetts Institute of Technology"
+                          required
+                        />
+                      </div>
 
-                    <div className="form-group">
-                      <label className="form-label">Location *</label>
-                      <select
-                        className="form-select"
-                        value={collegeForm.location}
-                        onChange={(e) => setCollegeForm({ ...collegeForm, location: e.target.value })}
-                        required
-                      >
-                        <option value="">Select Location</option>
-                        <option value="India">India</option>
-                        <option value="Abroad">Abroad</option>
-                      </select>
-                    </div>
+                      <div className="form-group">
+                        <label className="form-label">Type *</label>
+                        <select
+                          className="form-select"
+                          value={collegeForm.type}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, type: e.target.value })}
+                          required
+                        >
+                          <option value="">Select Type</option>
+                          <option value="Engineering">Engineering</option>
+                          <option value="Management">Management</option>
+                          <option value="Medical">Medical</option>
+                          <option value="Law">Law</option>
+                          <option value="Science">Science</option>
+                          <option value="Arts">Arts</option>
+                          <option value="Commerce">Commerce</option>
+                          <option value="Design">Design</option>
+                          <option value="Media">Media</option>
+                          <option value="Agriculture">Agriculture</option>
+                          <option value="Pharmacy">Pharmacy</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      </div>
 
-                    <div className="form-group">
-                      <label className="form-label">Type *</label>
-                      <input
-                        type="text"
-                        className="form-input"
-                        placeholder="e.g., Engineering, Management"
-                        value={collegeForm.type}
-                        onChange={(e) => setCollegeForm({ ...collegeForm, type: e.target.value })}
-                        required
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label">Fees (₹/year) *</label>
-                      <input
-                        type="number"
-                        className="form-input"
-                        value={collegeForm.fees}
-                        onChange={(e) => setCollegeForm({ ...collegeForm, fees: e.target.value })}
-                        required
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label">Ranking *</label>
-                      <input
-                        type="number"
-                        className="form-input"
-                        value={collegeForm.ranking}
-                        onChange={(e) => setCollegeForm({ ...collegeForm, ranking: e.target.value })}
-                        required
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label">Min CGPA *</label>
-                      <input
-                        type="number"
-                        step="0.1"
-                        className="form-input"
-                        value={collegeForm.minCGPA}
-                        onChange={(e) => setCollegeForm({ ...collegeForm, minCGPA: e.target.value })}
-                        required
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label">Placement Rate (%) *</label>
-                      <input
-                        type="number"
-                        step="0.1"
-                        className="form-input"
-                        value={collegeForm.placementRate}
-                        onChange={(e) => setCollegeForm({ ...collegeForm, placementRate: e.target.value })}
-                        required
-                      />
+                      <div className="form-group">
+                        <label className="form-label">Established Year</label>
+                        <input
+                          type="number"
+                          className="form-input"
+                          value={collegeForm.establishedYear}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, establishedYear: e.target.value })}
+                          placeholder="e.g., 1861"
+                          min="1500"
+                          max={new Date().getFullYear()}
+                        />
+                      </div>
                     </div>
                   </div>
 
-                  <div className="form-group">
-                    <label className="form-label">Description</label>
-                    <textarea
-                      className="form-textarea"
-                      rows="3"
-                      value={collegeForm.description}
-                      onChange={(e) => setCollegeForm({ ...collegeForm, description: e.target.value })}
-                    ></textarea>
+                  {/* Location Details Section */}
+                  <div className="form-section">
+                    <h4 className="section-title">
+                      <LocationIcon size={18} /> Location Details
+                    </h4>
+                    <div className="grid grid-2">
+                      <div className="form-group">
+                        <label className="form-label">Country *</label>
+                        <select
+                          className="form-select"
+                          value={collegeForm.country}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, country: e.target.value })}
+                          required
+                        >
+                          <option value="India">India</option>
+                          <option value="United States">United States</option>
+                          <option value="United Kingdom">United Kingdom</option>
+                          <option value="Canada">Canada</option>
+                          <option value="Australia">Australia</option>
+                          <option value="Germany">Germany</option>
+                          <option value="France">France</option>
+                          <option value="China">China</option>
+                          <option value="Japan">Japan</option>
+                          <option value="Singapore">Singapore</option>
+                          <option value="Netherlands">Netherlands</option>
+                          <option value="Switzerland">Switzerland</option>
+                          <option value="South Korea">South Korea</option>
+                          <option value="New Zealand">New Zealand</option>
+                          <option value="Ireland">Ireland</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">State/Province *</label>
+                        <input
+                          type="text"
+                          className="form-input"
+                          value={collegeForm.state}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, state: e.target.value })}
+                          placeholder="e.g., Maharashtra, California"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">City *</label>
+                        <input
+                          type="text"
+                          className="form-input"
+                          value={collegeForm.city}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, city: e.target.value })}
+                          placeholder="e.g., Mumbai, Cambridge"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Address</label>
+                        <input
+                          type="text"
+                          className="form-input"
+                          value={collegeForm.address}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, address: e.target.value })}
+                          placeholder="Complete address"
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="form-group">
-                    <label className="form-label">Facilities</label>
-                    <textarea
-                      className="form-textarea"
-                      rows="2"
-                      placeholder="e.g., Library, Hostel, Sports Complex"
-                      value={collegeForm.facilities}
-                      onChange={(e) => setCollegeForm({ ...collegeForm, facilities: e.target.value })}
-                    ></textarea>
+                  {/* Contact Information Section */}
+                  <div className="form-section">
+                    <h4 className="section-title">
+                      <PhoneIcon size={18} /> Contact Information
+                    </h4>
+                    <div className="grid grid-3">
+                      <div className="form-group">
+                        <label className="form-label">Website</label>
+                        <input
+                          type="url"
+                          className="form-input"
+                          value={collegeForm.website}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, website: e.target.value })}
+                          placeholder="https://example.com"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Email</label>
+                        <input
+                          type="email"
+                          className="form-input"
+                          value={collegeForm.email}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, email: e.target.value })}
+                          placeholder="admissions@example.com"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Phone</label>
+                        <input
+                          type="tel"
+                          className="form-input"
+                          value={collegeForm.phone}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, phone: e.target.value })}
+                          placeholder="+1-123-456-7890"
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="form-group">
-                    <label className="form-label">Scholarships</label>
-                    <textarea
-                      className="form-textarea"
-                      rows="2"
-                      placeholder="e.g., Merit-based, Need-based"
-                      value={collegeForm.scholarships}
-                      onChange={(e) => setCollegeForm({ ...collegeForm, scholarships: e.target.value })}
-                    ></textarea>
+                  {/* Academic Information Section */}
+                  <div className="form-section">
+                    <h4 className="section-title">
+                      <GraduationCapIcon size={18} /> Academic Information
+                    </h4>
+                    <div className="grid grid-2">
+                      <div className="form-group">
+                        <label className="form-label">Fees/Year *</label>
+                        <div className="input-with-select">
+                          <select
+                            className="form-select currency-select"
+                            value={collegeForm.currency}
+                            onChange={(e) => setCollegeForm({ ...collegeForm, currency: e.target.value })}
+                            style={{ width: '100px', marginRight: '0.5rem' }}
+                          >
+                            <option value="INR">₹ INR</option>
+                            <option value="USD">$ USD</option>
+                            <option value="EUR">€ EUR</option>
+                            <option value="GBP">£ GBP</option>
+                            <option value="AUD">A$ AUD</option>
+                            <option value="CAD">C$ CAD</option>
+                          </select>
+                          <input
+                            type="number"
+                            className="form-input"
+                            value={collegeForm.fees}
+                            onChange={(e) => setCollegeForm({ ...collegeForm, fees: e.target.value })}
+                            placeholder="50000"
+                            required
+                            style={{ flex: 1 }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">World/National Ranking</label>
+                        <input
+                          type="number"
+                          className="form-input"
+                          value={collegeForm.ranking}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, ranking: e.target.value })}
+                          placeholder="e.g., 1, 50, 100"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Min CGPA Required *</label>
+                        <input
+                          type="number"
+                          step="0.1"
+                          className="form-input"
+                          value={collegeForm.minCGPA}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, minCGPA: e.target.value })}
+                          placeholder="e.g., 7.5"
+                          min="0"
+                          max="10"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Placement Rate (%)</label>
+                        <input
+                          type="number"
+                          step="0.1"
+                          className="form-input"
+                          value={collegeForm.placementRate}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, placementRate: e.target.value })}
+                          placeholder="e.g., 95.5"
+                          min="0"
+                          max="100"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Accreditation</label>
+                        <input
+                          type="text"
+                          className="form-input"
+                          value={collegeForm.accreditation}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, accreditation: e.target.value })}
+                          placeholder="e.g., NAAC A++, ABET"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">Courses Offered</label>
+                      <textarea
+                        className="form-textarea"
+                        rows="2"
+                        value={collegeForm.coursesOffered}
+                        onChange={(e) => setCollegeForm({ ...collegeForm, coursesOffered: e.target.value })}
+                        placeholder="e.g., B.Tech in Computer Science, M.Tech in AI, MBA, etc."
+                      ></textarea>
+                    </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  {/* Campus Statistics Section */}
+                  <div className="form-section">
+                    <h4 className="section-title">
+                      <ChartIcon size={18} /> Campus Statistics
+                    </h4>
+                    <div className="grid grid-3">
+                      <div className="form-group">
+                        <label className="form-label">Campus Size</label>
+                        <input
+                          type="text"
+                          className="form-input"
+                          value={collegeForm.campusSize}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, campusSize: e.target.value })}
+                          placeholder="e.g., 500 acres, 200 sq km"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Total Students</label>
+                        <input
+                          type="number"
+                          className="form-input"
+                          value={collegeForm.studentCount}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, studentCount: e.target.value })}
+                          placeholder="e.g., 10000"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Faculty Count</label>
+                        <input
+                          type="number"
+                          className="form-input"
+                          value={collegeForm.facultyCount}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, facultyCount: e.target.value })}
+                          placeholder="e.g., 500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Additional Details Section */}
+                  <div className="form-section">
+                    <h4 className="section-title">
+                      <DocumentIcon size={18} /> Additional Details
+                    </h4>
+                    <div className="form-group">
+                      <label className="form-label">Description</label>
+                      <textarea
+                        className="form-textarea"
+                        rows="3"
+                        value={collegeForm.description}
+                        onChange={(e) => setCollegeForm({ ...collegeForm, description: e.target.value })}
+                        placeholder="Brief description about the college, its history, achievements, etc."
+                      ></textarea>
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">Facilities</label>
+                      <textarea
+                        className="form-textarea"
+                        rows="2"
+                        placeholder="e.g., Library, Hostel, Sports Complex, Research Labs, Cafeteria"
+                        value={collegeForm.facilities}
+                        onChange={(e) => setCollegeForm({ ...collegeForm, facilities: e.target.value })}
+                      ></textarea>
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">Scholarships</label>
+                      <textarea
+                        className="form-textarea"
+                        rows="2"
+                        placeholder="e.g., Merit-based scholarships, Need-based aid, Sports scholarships"
+                        value={collegeForm.scholarships}
+                        onChange={(e) => setCollegeForm({ ...collegeForm, scholarships: e.target.value })}
+                      ></textarea>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '2px solid #f0f0f0' }}>
                     {editingCollege && (
-                      <button 
-                        type="button" 
-                        className="btn btn-secondary" 
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
                         onClick={() => {
                           setEditingCollege(null);
                           setShowForm(false);
-                          setCollegeForm({
-                            name: '',
-                            location: '',
-                            type: '',
-                            fees: '',
-                            ranking: '',
-                            minCGPA: '',
-                            placementRate: '',
-                            description: '',
-                            facilities: '',
-                            scholarships: ''
-                          });
+                          resetCollegeForm();
                         }}
                       >
                         Cancel
                       </button>
                     )}
                     <button type="submit" className="btn btn-success" disabled={loading} style={{ flex: 1 }}>
-                      {loading ? (editingCollege ? 'Updating...' : 'Adding...') : (editingCollege ? 'Update College' : 'Add College')}
+                      {loading ? (
+                        <><ClockIcon size={18} /> {editingCollege ? 'Updating...' : 'Adding...'}</>
+                      ) : (
+                        <><CheckIcon size={18} /> {editingCollege ? 'Update College' : 'Add College'}</>
+                      )}
                     </button>
                   </div>
                 </form>
@@ -650,31 +1074,100 @@ function AdminDashboard() {
 
             <div className="grid grid-2">
               {colleges.map(college => (
-                <div key={college.id} className="card">
+                <div key={college.id} className="card college-detail-card">
                   <div className="card-header">
                     <h3>{college.name}</h3>
+                    {college.ranking && (
+                      <span className="ranking-badge">
+                        <TrophyIcon size={16} /> Rank #{college.ranking}
+                      </span>
+                    )}
                   </div>
                   <div className="card-body">
-                    <p><strong>Location:</strong> {college.location}</p>
-                    <p><strong>Type:</strong> {college.type}</p>
-                    <p><strong>Fees:</strong> ₹{college.fees?.toLocaleString()}/year</p>
-                    <p><strong>Ranking:</strong> {college.ranking}</p>
-                    <p><strong>Min CGPA:</strong> {college.minCGPA}</p>
-                    <p><strong>Placement:</strong> {college.placementRate}%</p>
-                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+                    <div className="college-info-section">
+                      <h4><LocationIcon size={16} /> Location</h4>
+                      <p>{college.city && `${college.city}, `}{college.state && `${college.state}, `}{college.country || college.location}</p>
+                    </div>
+
+                    <div className="college-info-section">
+                      <h4><GraduationCapIcon size={16} /> Academic Info</h4>
+                      <div className="info-grid">
+                        <p><strong>Type:</strong> {college.type}</p>
+                        <p><strong>Min CGPA:</strong> {college.minCGPA}</p>
+                        {college.establishedYear && (
+                          <p><strong>Founded:</strong> {college.establishedYear}</p>
+                        )}
+                        {college.accreditation && (
+                          <p><strong>Accreditation:</strong> {college.accreditation}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="college-info-section">
+                      <h4><MoneyIcon size={16} /> Financial Info</h4>
+                      <p>
+                        <strong>Fees:</strong> 
+                        {college.currency === 'USD' && ' $'}
+                        {college.currency === 'EUR' && ' €'}
+                        {college.currency === 'GBP' && ' £'}
+                        {college.currency === 'INR' && ' ₹'}
+                        {college.currency === 'AUD' && ' A$'}
+                        {college.currency === 'CAD' && ' C$'}
+                        {!college.currency && ' ₹'}
+                        {college.fees?.toLocaleString()}/year
+                      </p>
+                      {college.scholarships && (
+                        <p><strong>Scholarships:</strong> Available</p>
+                      )}
+                    </div>
+
+                    {(college.studentCount || college.facultyCount || college.placementRate) && (
+                      <div className="college-info-section">
+                        <h4><ChartIcon size={16} /> Statistics</h4>
+                        <div className="info-grid">
+                          {college.placementRate && (
+                            <p><strong>Placement:</strong> {college.placementRate}%</p>
+                          )}
+                          {college.studentCount && (
+                            <p><strong>Students:</strong> {college.studentCount.toLocaleString()}</p>
+                          )}
+                          {college.facultyCount && (
+                            <p><strong>Faculty:</strong> {college.facultyCount.toLocaleString()}</p>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {(college.website || college.email || college.phone) && (
+                      <div className="college-info-section">
+                        <h4><PhoneIcon size={16} /> Contact</h4>
+                        {college.website && (
+                          <p>
+                            <strong>Website:</strong>{' '}
+                            <a href={college.website} target="_blank" rel="noopener noreferrer" className="college-link">
+                              Visit Website
+                            </a>
+                          </p>
+                        )}
+                        {college.email && <p><strong>Email:</strong> {college.email}</p>}
+                        {college.phone && <p><strong>Phone:</strong> {college.phone}</p>}
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid #e9ecef' }}>
                       <button
                         className="btn btn-primary"
                         onClick={() => handleEditCollege(college)}
                         style={{ flex: 1 }}
                       >
-                        Edit
+                        <EditIcon size={16} /> Edit
                       </button>
                       <button
                         className="btn btn-danger"
                         onClick={() => handleDeleteCollege(college.id, college.name)}
                         style={{ flex: 1 }}
                       >
-                        Delete
+                        <TrashIcon size={16} /> Delete
                       </button>
                     </div>
                   </div>
@@ -916,7 +1409,7 @@ function AdminDashboard() {
                   <ul className="options-list">
                     {q.options.map((option, i) => (
                       <li key={i} className={i === q.correctAnswer ? 'correct-option' : ''}>
-                        {option} {i === q.correctAnswer && '✓'}
+                        {option} {i === q.correctAnswer && <CheckIcon size={16} style={{ color: '#10b981', marginLeft: '0.5rem' }} />}
                       </li>
                     ))}
                   </ul>
@@ -942,6 +1435,158 @@ function AdminDashboard() {
           </div>
         )}
 
+        {/* Applications Tab */}
+        {activeTab === 'applications' && (
+          <div className="tab-content">
+            <div className="tab-header">
+              <h2>Student Applications ({applications.length})</h2>
+            </div>
+
+            {loading && <div className="spinner"></div>}
+
+            {/* Applications Statistics */}
+            <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', marginBottom: '2rem' }}>
+              <div className="stat-card" style={{ background: '#fef3c7', padding: '1.5rem', borderRadius: '12px' }}>
+                <h3 style={{ color: '#92400e', fontSize: '2rem', margin: 0 }}>{applications.filter(a => a.status === 'pending').length}</h3>
+                <p style={{ color: '#92400e', margin: '0.5rem 0 0 0' }}>Pending</p>
+              </div>
+              <div className="stat-card" style={{ background: '#d1fae5', padding: '1.5rem', borderRadius: '12px' }}>
+                <h3 style={{ color: '#065f46', fontSize: '2rem', margin: 0 }}>{applications.filter(a => a.status === 'approved').length}</h3>
+                <p style={{ color: '#065f46', margin: '0.5rem 0 0 0' }}>Approved</p>
+              </div>
+              <div className="stat-card" style={{ background: '#fee2e2', padding: '1.5rem', borderRadius: '12px' }}>
+                <h3 style={{ color: '#991b1b', fontSize: '2rem', margin: 0 }}>{applications.filter(a => a.status === 'rejected').length}</h3>
+                <p style={{ color: '#991b1b', margin: '0.5rem 0 0 0' }}>Rejected</p>
+              </div>
+            </div>
+
+            {/* Applications List */}
+            {applications.length > 0 ? (
+              <div className="applications-admin-list" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {applications.map((app) => (
+                  <div key={app.id} className="card" style={{ padding: '2rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '2px solid #e2e8f0' }}>
+                      <div>
+                        <h3 style={{ color: '#667eea', margin: 0, fontSize: '1.3rem' }}>{app.studentName}</h3>
+                        <p style={{ color: '#718096', fontSize: '0.9rem', margin: '0.5rem 0 0 0' }}>
+                          Applied to: <strong>{app.collegeName}</strong>
+                        </p>
+                        <p style={{ color: '#718096', fontSize: '0.85rem', margin: '0.25rem 0 0 0' }}>
+                          {app.appliedAt?.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                        </p>
+                      </div>
+                      <span 
+                        className={`status-badge ${
+                          app.status === 'approved' ? 'status-approved' : 
+                          app.status === 'rejected' ? 'status-rejected' : 
+                          'status-pending'
+                        }`}
+                        style={{
+                          padding: '0.5rem 1rem',
+                          borderRadius: '20px',
+                          fontWeight: 600,
+                          fontSize: '0.9rem'
+                        }}
+                      >
+                        {app.status === 'approved' ? 'Approved' : app.status === 'rejected' ? 'Rejected' : 'Pending Review'}
+                      </span>
+                    </div>
+
+                    <div className="application-details-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+                      <div>
+                        <p style={{ fontSize: '0.85rem', color: '#718096', margin: 0 }}>Email</p>
+                        <p style={{ fontSize: '1rem', color: '#2d3748', fontWeight: 600, margin: '0.25rem 0 0 0' }}>{app.studentEmail}</p>
+                      </div>
+                      <div>
+                        <p style={{ fontSize: '0.85rem', color: '#718096', margin: 0 }}>Phone</p>
+                        <p style={{ fontSize: '1rem', color: '#2d3748', fontWeight: 600, margin: '0.25rem 0 0 0' }}>{app.phone}</p>
+                      </div>
+                      <div>
+                        <p style={{ fontSize: '0.85rem', color: '#718096', margin: 0 }}>CGPA</p>
+                        <p style={{ fontSize: '1rem', color: '#2d3748', fontWeight: 600, margin: '0.25rem 0 0 0' }}>{app.cgpa}</p>
+                      </div>
+                      <div>
+                        <p style={{ fontSize: '0.85rem', color: '#718096', margin: 0 }}>Test Score</p>
+                        <p style={{ fontSize: '1rem', color: '#2d3748', fontWeight: 600, margin: '0.25rem 0 0 0' }}>{app.testScore}%</p>
+                      </div>
+                      <div>
+                        <p style={{ fontSize: '0.85rem', color: '#718096', margin: 0 }}>10th %</p>
+                        <p style={{ fontSize: '1rem', color: '#2d3748', fontWeight: 600, margin: '0.25rem 0 0 0' }}>{app.tenthPercentage}%</p>
+                      </div>
+                      <div>
+                        <p style={{ fontSize: '0.85rem', color: '#718096', margin: 0 }}>12th %</p>
+                        <p style={{ fontSize: '1rem', color: '#2d3748', fontWeight: 600, margin: '0.25rem 0 0 0' }}>{app.twelfthPercentage}%</p>
+                      </div>
+                    </div>
+
+                    <div style={{ marginBottom: '1rem' }}>
+                      <p style={{ fontSize: '0.85rem', color: '#718096', margin: 0 }}>Preferred Course</p>
+                      <p style={{ fontSize: '1rem', color: '#2d3748', fontWeight: 600, margin: '0.25rem 0 0 0' }}>{app.preferredCourse}</p>
+                    </div>
+
+                    {app.address && (
+                      <div style={{ marginBottom: '1rem' }}>
+                        <p style={{ fontSize: '0.85rem', color: '#718096', margin: 0 }}>Address</p>
+                        <p style={{ fontSize: '1rem', color: '#2d3748', margin: '0.25rem 0 0 0' }}>
+                          {app.address}, {app.city}, {app.state} - {app.pincode}
+                        </p>
+                      </div>
+                    )}
+
+                    {app.remarks && (
+                      <div style={{ background: '#f7fafc', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
+                        <p style={{ fontSize: '0.85rem', color: '#718096', margin: 0 }}>Student Remarks</p>
+                        <p style={{ fontSize: '1rem', color: '#2d3748', margin: '0.5rem 0 0 0' }}>{app.remarks}</p>
+                      </div>
+                    )}
+
+                    {app.adminRemarks && (
+                      <div style={{ background: '#f0fdf4', padding: '1rem', borderRadius: '8px', marginBottom: '1rem', borderLeft: '4px solid #10b981' }}>
+                        <p style={{ fontSize: '0.85rem', color: '#059669', fontWeight: 600, margin: 0 }}>Admin Remarks</p>
+                        <p style={{ fontSize: '1rem', color: '#2d3748', margin: '0.5rem 0 0 0' }}>{app.adminRemarks}</p>
+                      </div>
+                    )}
+
+                    {app.status === 'pending' && (
+                      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
+                        <button
+                          className="btn btn-success"
+                          onClick={() => {
+                            const remarks = prompt('Enter remarks for approval (optional):');
+                            handleUpdateApplicationStatus(app.id, 'approved', remarks || 'Application approved');
+                          }}
+                          style={{ flex: 1 }}
+                        >
+                          <CheckIcon size={18} /> Approve
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => {
+                            const remarks = prompt('Enter reason for rejection:');
+                            if (remarks) {
+                              handleUpdateApplicationStatus(app.id, 'rejected', remarks);
+                            } else {
+                              alert('Please provide a reason for rejection');
+                            }
+                          }}
+                          style={{ flex: 1 }}
+                        >
+                          <CloseIcon size={18} /> Reject
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center' }}>
+                <h3>No applications yet</h3>
+                <p style={{ color: '#718096' }}>Applications from students will appear here</p>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* College Import Modal */}
         {showCollegeImportModal && (
           <div className="modal-overlay" onClick={() => setShowCollegeImportModal(false)}>
@@ -952,7 +1597,7 @@ function AdminDashboard() {
                   className="modal-close"
                   onClick={() => setShowCollegeImportModal(false)}
                 >
-                  ✕
+                  <CloseIcon size={20} />
                 </button>
               </div>
               
@@ -1060,7 +1705,7 @@ function AdminDashboard() {
                   className="modal-close"
                   onClick={() => setShowAIGenerateModal(false)}
                 >
-                  ✕
+                  <CloseIcon size={20} />
                 </button>
               </div>
               
@@ -1142,7 +1787,7 @@ function AdminDashboard() {
                           <ul className="options-list">
                             {q.options.map((option, i) => (
                               <li key={i} className={i === q.correctAnswer ? 'correct-option' : ''}>
-                                {option} {i === q.correctAnswer && '✓'}
+                                {option} {i === q.correctAnswer && <CheckIcon size={16} style={{ color: '#10b981', marginLeft: '0.5rem' }} />}
                               </li>
                             ))}
                           </ul>

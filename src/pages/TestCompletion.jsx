@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
+import { CheckIcon, FileTextIcon, CloseIcon, AwardIcon, TrophyIcon, ChartIcon, BookOpenIcon } from '../components/Icons';
 import './TestCompletion.css';
 
 function TestCompletion() {
@@ -52,10 +53,10 @@ function TestCompletion() {
   }
 
   const getPerformanceLevel = (score) => {
-    if (score >= 80) return { level: 'Excellent', color: '#10b981', emoji: '🌟' };
-    if (score >= 60) return { level: 'Good', color: '#3b82f6', emoji: '👍' };
-    if (score >= 40) return { level: 'Average', color: '#f59e0b', emoji: '📈' };
-    return { level: 'Needs Improvement', color: '#ef4444', emoji: '📚' };
+    if (score >= 80) return { level: 'Excellent', color: '#10b981', icon: <AwardIcon size={24} /> };
+    if (score >= 60) return { level: 'Good', color: '#3b82f6', icon: <TrophyIcon size={24} /> };
+    if (score >= 40) return { level: 'Average', color: '#f59e0b', icon: <ChartIcon size={24} /> };
+    return { level: 'Needs Improvement', color: '#ef4444', icon: <BookOpenIcon size={24} /> };
   };
 
   const performance = getPerformanceLevel(score);
@@ -67,7 +68,7 @@ function TestCompletion() {
           {/* Success Icon */}
           <div className="success-icon">
             <div className="checkmark-circle">
-              <div className="checkmark">✓</div>
+              <div className="checkmark"><CheckIcon size={48} color="#10b981" /></div>
             </div>
           </div>
 
@@ -83,7 +84,7 @@ function TestCompletion() {
               {Math.round(score)}%
             </div>
             <div className="score-performance" style={{ color: performance.color }}>
-              {performance.emoji} {performance.level}
+              {performance.icon} {performance.level}
             </div>
           </div>
 
@@ -91,7 +92,7 @@ function TestCompletion() {
           {testResult && (
             <div className="results-summary">
               <div className="result-item">
-                <div className="result-icon">📝</div>
+                <div className="result-icon"><FileTextIcon size={32} /></div>
                 <div>
                   <div className="result-label">Total Questions</div>
                   <div className="result-value">{testResult.totalQuestions}</div>
@@ -99,7 +100,7 @@ function TestCompletion() {
               </div>
 
               <div className="result-item">
-                <div className="result-icon">✅</div>
+                <div className="result-icon"><CheckIcon size={32} color="#10b981" /></div>
                 <div>
                   <div className="result-label">Correct Answers</div>
                   <div className="result-value">{testResult.correctAnswers}</div>
@@ -107,7 +108,7 @@ function TestCompletion() {
               </div>
 
               <div className="result-item">
-                <div className="result-icon">❌</div>
+                <div className="result-icon"><CloseIcon size={32} color="#ef4444" /></div>
                 <div>
                   <div className="result-label">Wrong Answers</div>
                   <div className="result-value">

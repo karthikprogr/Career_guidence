@@ -3,20 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { logSuccess, logError } from '../logger';
+import { GlobeIcon, LocationIcon, CheckIcon } from '../components/Icons';
 import './Selection.css';
 
 const locations = [
   {
     id: 'India',
     name: 'India',
-    icon: '🇮🇳',
+    icon: <LocationIcon size={48} color="#ff9933" />,
     description: 'Study in India',
     highlights: ['Lower Fees', 'Familiar Culture', 'Wide Range of Options']
   },
   {
     id: 'Abroad',
     name: 'Abroad',
-    icon: '🌍',
+    icon: <GlobeIcon size={48} color="#3b82f6" />,
     description: 'Study Abroad',
     highlights: ['Global Exposure', 'International Standards', 'Career Opportunities']
   }
@@ -69,10 +70,10 @@ function LocationSelection() {
               <p className="location-desc">{location.description}</p>
               <ul className="location-highlights">
                 {location.highlights.map((highlight, idx) => (
-                  <li key={idx}>✓ {highlight}</li>
+                  <li key={idx}><CheckIcon size={16} /> {highlight}</li>
                 ))}
               </ul>
-              {selected === location.id && <div className="check-mark">✓</div>}
+              {selected === location.id && <div className="check-mark"><CheckIcon size={24} color="#10b981" /></div>}
             </div>
           ))}
         </div>

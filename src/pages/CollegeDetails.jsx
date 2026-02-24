@@ -3,6 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { logInfo } from '../logger';
+import { 
+  LocationIcon, 
+  CheckIcon, 
+  MoneyIcon, 
+  GraduationCapIcon, 
+  ChartIcon, 
+  BuildingIcon,
+  FileTextIcon
+} from '../components/Icons';
 import './CollegeDetails.css';
 
 function CollegeDetails() {
@@ -65,7 +74,7 @@ function CollegeDetails() {
           <div className="college-header">
             <div>
               <h1>{college.name}</h1>
-              <p className="college-location">📍 {college.location}</p>
+              <p className="college-location"><LocationIcon size={20} /> {college.location}</p>
             </div>
             <div className="college-rank">
               <span>Rank</span>
@@ -78,7 +87,7 @@ function CollegeDetails() {
             <div className={`eligibility-banner ${isEligible ? 'eligible' : 'not-eligible'}`}>
               {isEligible ? (
                 <>
-                  <span className="status-icon">✓</span>
+                  <span className="status-icon"><CheckIcon size={20} /></span>
                   <span>You are eligible for this college</span>
                 </>
               ) : (
@@ -93,34 +102,36 @@ function CollegeDetails() {
           {/* Quick Info */}
           <div className="quick-info-grid">
             <div className="info-card">
-              <div className="info-icon">💰</div>
+              <div className="info-icon"><MoneyIcon size={32} /></div>
               <div>
                 <p className="info-label">Annual Fees</p>
-                <p className="info-value">₹{college.fees.toLocaleString()}</p>
+                <p className="info-value">
+                  {college.fees ? `₹${college.fees.toLocaleString()}` : 'Not Available'}
+                </p>
               </div>
             </div>
 
             <div className="info-card">
-              <div className="info-icon">🎓</div>
+              <div className="info-icon"><GraduationCapIcon size={32} /></div>
               <div>
                 <p className="info-label">Type</p>
-                <p className="info-value">{college.type}</p>
+                <p className="info-value">{college.type || 'Not specified'}</p>
               </div>
             </div>
 
             <div className="info-card">
-              <div className="info-icon">📊</div>
+              <div className="info-icon"><ChartIcon size={32} /></div>
               <div>
                 <p className="info-label">Min CGPA</p>
-                <p className="info-value">{college.minCGPA}</p>
+                <p className="info-value">{college.minCGPA || 'N/A'}</p>
               </div>
             </div>
 
             <div className="info-card">
-              <div className="info-icon">💼</div>
+              <div className="info-icon"><BuildingIcon size={32} /></div>
               <div>
                 <p className="info-label">Placement Rate</p>
-                <p className="info-value">{college.placementRate}%</p>
+                <p className="info-value">{college.placementRate || 'N/A'}%</p>
               </div>
             </div>
           </div>
@@ -136,7 +147,7 @@ function CollegeDetails() {
           {/* Facilities */}
           {college.facilities && (
             <div className="college-section">
-              <h2>🏢 Facilities</h2>
+              <h2><BuildingIcon size={24} /> Facilities</h2>
               <p>{college.facilities}</p>
             </div>
           )}
@@ -144,14 +155,14 @@ function CollegeDetails() {
           {/* Scholarships */}
           {college.scholarships && (
             <div className="college-section">
-              <h2>🎓 Scholarships</h2>
+              <h2><GraduationCapIcon size={24} /> Scholarships</h2>
               <p>{college.scholarships}</p>
             </div>
           )}
 
           {/* Registration Process */}
           <div className="college-section registration-section">
-            <h2>📝 Registration Process</h2>
+            <h2><FileTextIcon size={24} /> Registration Process</h2>
             <ol>
               <li>Complete your student profile with all required details</li>
               <li>Take the aptitude test to demonstrate your skills</li>
@@ -182,18 +193,26 @@ function CollegeDetails() {
               >
                 Complete Profile First
               </button>
-            ) : studentData?.aptitudeScore === 0 ? (
-              <button 
-                className="btn btn-primary btn-large"
-                onClick={() => navigate('/aptitude-test')}
-              >
-                Take Aptitude Test
-              </button>
-            ) : (
-              <div className="alert alert-success">
-                ✓ You have completed all requirements. Contact the college for application.
+            ) : !isEligible ? (
+              <div className="alert alert-warning">
+                Your CGPA does not meet the eligibility criteria for this college.
               </div>
+            ) : (
+              <button 
+                className="btn btn-success btn-large"
+                onClick={() => navigate(`/college-apply/${college.id}`)}
+                style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}
+              >
+                <FileTextIcon size={20} /> Apply Now
+              </button>
             )}
+            <button 
+              className="btn btn-secondary"
+              onClick={() => navigate('/applications')}
+              style={{ marginTop: '1rem' }}
+            >
+              View My Applications
+            </button>
           </div>
         </div>
       </div>

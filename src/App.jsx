@@ -21,6 +21,9 @@ import CollegeDetails from './pages/CollegeDetails';
 import StudentDetails from './pages/StudentDetails';
 import AptitudeTest from './pages/AptitudeTest';
 import TestCompletion from './pages/TestCompletion';
+import CollegeApplication from './pages/CollegeApplication';
+import ApplicationHistory from './pages/ApplicationHistory';
+import CollegeComparison from './pages/CollegeComparison';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -152,6 +155,30 @@ function App() {
             element={
               <ProtectedRoute user={user} requiredRole="student" userRole={userRole}>
                 <TestCompletion />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/college-apply/:collegeId" 
+            element={
+              <ProtectedRoute user={user} requiredRole="student" userRole={userRole}>
+                <CollegeApplication />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/applications" 
+            element={
+              <ProtectedRoute user={user} requiredRole="student" userRole={userRole}>
+                <ApplicationHistory />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/college-compare" 
+            element={
+              <ProtectedRoute user={user} requiredRole="student" userRole={userRole}>
+                <CollegeComparison />
               </ProtectedRoute>
             } 
           />

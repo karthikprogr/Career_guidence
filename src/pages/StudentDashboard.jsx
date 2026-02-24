@@ -3,6 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { logInfo } from '../logger';
+import { 
+  GraduationCapIcon, 
+  FileTextIcon, 
+  LocationIcon, 
+  ChartIcon, 
+  DocumentIcon, 
+  CheckIcon,
+  UsersIcon,
+  BuildingIcon
+} from '../components/Icons';
 import './StudentDashboard.css';
 
 function StudentDashboard() {
@@ -46,10 +56,10 @@ function StudentDashboard() {
         <div className="dashboard-grid">
           {/* Profile Status */}
           <div className="dashboard-card">
-            <div className="card-icon">👤</div>
+            <div className="card-icon"><UsersIcon size={32} /></div>
             <h3>Profile Status</h3>
             <p className={profileComplete ? 'status-complete' : 'status-incomplete'}>
-              {profileComplete ? '✓ Complete' : '⚠ Incomplete'}
+              {profileComplete ? <><CheckIcon size={16} /> Complete</> : '⚠ Incomplete'}
             </p>
             {!profileComplete && (
               <button 
@@ -63,7 +73,7 @@ function StudentDashboard() {
 
           {/* Career Selection */}
           <div className="dashboard-card">
-            <div className="card-icon">🎯</div>
+            <div className="card-icon"><GraduationCapIcon size={32} /></div>
             <h3>Career Preference</h3>
             <p>{studentData?.preferences?.career || 'Not Selected'}</p>
             <button 
@@ -76,7 +86,7 @@ function StudentDashboard() {
 
           {/* Location Preference */}
           <div className="dashboard-card">
-            <div className="card-icon">📍</div>
+            <div className="card-icon"><LocationIcon size={32} /></div>
             <h3>Location Preference</h3>
             <p>{studentData?.preferences?.location || 'Not Selected'}</p>
             <button 
@@ -89,17 +99,26 @@ function StudentDashboard() {
 
           {/* Aptitude Test */}
           <div className="dashboard-card">
-            <div className="card-icon">📝</div>
+            <div className="card-icon"><FileTextIcon size={32} /></div>
             <h3>Aptitude Test</h3>
             {hasAppearedForTest ? (
               <>
                 <p className="status-complete">Score: {studentData?.aptitudeScore}%</p>
-                <button 
-                  className="btn btn-secondary"
-                  onClick={() => navigate('/test-completion')}
-                >
-                  View Result
-                </button>
+                <div style={{ display: 'flex', gap: '0.5rem', flexDirection: 'column' }}>
+                  <button 
+                    className="btn btn-secondary"
+                    onClick={() => navigate('/test-completion')}
+                  >
+                    View Result
+                  </button>
+                  <button 
+                    className="btn btn-primary"
+                    onClick={() => navigate('/aptitude-test')}
+                    style={{ fontSize: '0.9rem' }}
+                  >
+                    Retake Test
+                  </button>
+                </div>
               </>
             ) : (
               <>
@@ -122,14 +141,14 @@ function StudentDashboard() {
 
           {/* CGPA */}
           <div className="dashboard-card">
-            <div className="card-icon">📊</div>
+            <div className="card-icon"><ChartIcon size={32} /></div>
             <h3>Academic Score</h3>
             <p>CGPA: {studentData?.cgpa || 'N/A'}</p>
           </div>
 
           {/* College List */}
           <div className="dashboard-card">
-            <div className="card-icon">🏫</div>
+            <div className="card-icon"><BuildingIcon size={32} /></div>
             <h3>Find Colleges</h3>
             <p>Browse eligible colleges</p>
             <button 
@@ -137,6 +156,19 @@ function StudentDashboard() {
               onClick={() => navigate('/college-list')}
             >
               View Colleges
+            </button>
+          </div>
+
+          {/* My Applications */}
+          <div className="dashboard-card">
+            <div className="card-icon"><DocumentIcon size={32} /></div>
+            <h3>My Applications</h3>
+            <p>Track application status</p>
+            <button 
+              className="btn btn-primary"
+              onClick={() => navigate('/applications')}
+            >
+              View Applications
             </button>
           </div>
         </div>
@@ -149,25 +181,31 @@ function StudentDashboard() {
               className="action-btn"
               onClick={() => navigate('/career-selection')}
             >
-              🎯 Select Career
+              <GraduationCapIcon size={18} /> Select Career
             </button>
             <button 
               className="action-btn"
               onClick={() => navigate('/location-selection')}
             >
-              📍 Choose Location
+              <LocationIcon size={18} /> Choose Location
             </button>
             <button 
               className="action-btn"
               onClick={() => navigate('/student-details')}
             >
-              📝 Update Details
+              <FileTextIcon size={18} /> Update Details
             </button>
             <button 
               className="action-btn"
               onClick={() => navigate('/college-list')}
             >
-              🏫 Browse Colleges
+              <BuildingIcon size={18} /> Browse Colleges
+            </button>
+            <button 
+              className="action-btn"
+              onClick={() => navigate('/applications')}
+            >
+              <DocumentIcon size={18} /> My Applications
             </button>
           </div>
         </div>

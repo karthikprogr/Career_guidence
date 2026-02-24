@@ -185,4 +185,168 @@
   .tab-header .btn {
     width: 100%;
   }
+
+  .grid-3 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Enhanced Form Sections */
+.form-section {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e9ecef;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #495057;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.input-with-select {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.currency-select {
+  flex-shrink: 0;
+}
+
+.form-card {
+  max-height: 80vh;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.form-card::-webkit-scrollbar {
+  width: 8px;
+}
+
+.form-card::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.form-card::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.form-card::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Enhanced form inputs */
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Grid responsive adjustments */
+@media (max-width: 1024px) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .input-with-select {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .currency-select {
+    width: 100% !important;
+  }
+}
+
+/* College Detail Cards */
+.college-detail-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ranking-badge {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: white;
+  padding: 0.35rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(251, 191, 36, 0.3);
+}
+
+.college-info-section {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.college-info-section:last-of-type {
+  border-bottom: none;
+}
+
+.college-info-section h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.college-info-section p {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.college-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.college-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .college-detail-card .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
