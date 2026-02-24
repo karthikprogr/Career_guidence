@@ -1,7 +1,7 @@
 .college-comparison-page {
   min-height: calc(100vh - 80px);
   padding: 2rem 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
 }
 
 .college-comparison-page .container {
@@ -51,7 +51,7 @@
 }
 
 .comparison-table thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
   color: white;
 }
 
@@ -64,7 +64,7 @@
 .comparison-table .sticky-col {
   position: sticky;
   left: 0;
-  background: #667eea;
+  background: #2563eb;
   z-index: 10;
   min-width: 180px;
 }
@@ -165,7 +165,7 @@
 }
 
 .comparison-summary h2 {
-  color: #667eea;
+  color: #2563eb;
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -181,7 +181,7 @@
   padding: 1.5rem;
   border-radius: 12px;
   text-align: center;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #2563eb;
 }
 
 .summary-card h3 {
@@ -201,7 +201,7 @@
   display: block;
   font-size: 1.5rem;
   font-weight: bold;
-  color: #667eea;
+  color: #2563eb;
   margin-top: 0.5rem;
 }
 

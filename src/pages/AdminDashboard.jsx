@@ -1467,7 +1467,7 @@ function AdminDashboard() {
                   <div key={app.id} className="card" style={{ padding: '2rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '2px solid #e2e8f0' }}>
                       <div>
-                        <h3 style={{ color: '#667eea', margin: 0, fontSize: '1.3rem' }}>{app.studentName}</h3>
+                        <h3 style={{ color: '#2563eb', margin: 0, fontSize: '1.3rem' }}>{app.studentName}</h3>
                         <p style={{ color: '#718096', fontSize: '0.9rem', margin: '0.5rem 0 0 0' }}>
                           Applied to: <strong>{app.collegeName}</strong>
                         </p>
