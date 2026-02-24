@@ -10,13 +10,13 @@
   --success-color: #10b981;
   --danger-color: #ef4444;
   --warning-color: #f59e0b;
-  --dark-color: #1f2937;
-  --light-color: #f3f4f6;
-  --text-color: #374151;
-  --border-color: #d1d5db;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --dark-color: #1e293b;
+  --light-color: #f8fafc;
+  --text-color: #475569;
+  --border-color: #e2e8f0;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 body {

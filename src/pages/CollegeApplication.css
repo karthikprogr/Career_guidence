@@ -1,7 +1,7 @@
 .college-application-page {
   min-height: calc(100vh - 80px);
   padding: 2rem 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
 }
 
 .college-application-page .container {
@@ -19,7 +19,7 @@
 }
 
 .college-info-card h2 {
-  color: #667eea;
+  color: #2563eb;
   margin-bottom: 1rem;
   font-size: 1.8rem;
 }
@@ -85,7 +85,7 @@
 }
 
 .test-score-info h3 {
-  color: #667eea;
+  color: #2563eb;
   margin-bottom: 1rem;
 }
 
@@ -99,7 +99,7 @@
 .score-display .score {
   font-size: 3rem;
   font-weight: bold;
-  color: #667eea;
+  color: #2563eb;
 }
 
 .score-display .score-label {
@@ -115,7 +115,7 @@
 }
 
 .application-form-card > h2 {
-  color: #667eea;
+  color: #2563eb;
   margin-bottom: 2rem;
   text-align: center;
   font-size: 1.8rem;

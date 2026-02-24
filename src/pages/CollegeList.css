@@ -94,10 +94,10 @@
 .comparison-toolbar {
   position: sticky;
   bottom: 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
   padding: 1rem;
   border-radius: 12px 12px 0 0;
-  box-shadow: 0 -4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 -4px 12px rgba(37, 99, 235, 0.3);
   margin-top: 2rem;
   z-index: 100;
 }
@@ -133,7 +133,7 @@
   height: 24px;
   cursor: pointer;
   z-index: 10;
-  accent-color: #667eea;
+  accent-color: #2563eb;
   transform: scale(1.3);
 }
 

@@ -10,6 +10,7 @@ import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Pages
+import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import StudentDashboard from './pages/StudentDashboard';
@@ -24,6 +25,7 @@ import TestCompletion from './pages/TestCompletion';
 import CollegeApplication from './pages/CollegeApplication';
 import ApplicationHistory from './pages/ApplicationHistory';
 import CollegeComparison from './pages/CollegeComparison';
+import CareerRoadmap from './pages/CareerRoadmap';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -63,7 +65,8 @@ function App() {
         display: 'flex', 
         justifyContent: 'center', 
         alignItems: 'center', 
-        height: '100vh' 
+        height: '100vh',
+        background: '#f8fafc'
       }}>
         <div className="spinner"></div>
       </div>
@@ -76,6 +79,14 @@ function App() {
         <Navbar user={user} userRole={userRole} />
         <Routes>
           {/* Public Routes */}
+          <Route 
+            path="/" 
+            element={
+              user && userRole ? 
+                <Navigate to={userRole === 'admin' ? '/admin' : '/student'} replace /> : 
+                <LandingPage />
+            } 
+          />
           <Route 
             path="/login" 
             element={
@@ -107,6 +118,14 @@ function App() {
             element={
               <ProtectedRoute user={user} requiredRole="student" userRole={userRole}>
                 <CareerSelection />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/career-roadmap" 
+            element={
+              <ProtectedRoute user={user} requiredRole="student" userRole={userRole}>
+                <CareerRoadmap />
               </ProtectedRoute>
             } 
           />
@@ -193,19 +212,8 @@ function App() {
             } 
           />
 
-          {/* Default Route */}
-          <Route 
-            path="/" 
-            element={
-              !user ? 
-                <Navigate to="/login" replace /> : 
-                !userRole ? 
-                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                    <div className="spinner"></div>
-                  </div> :
-                  <Navigate to={userRole === 'admin' ? '/admin' : '/student'} replace />
-            } 
-          />
+          {/* Catch-all */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </Router>
