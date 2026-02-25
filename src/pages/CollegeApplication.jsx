@@ -129,8 +129,25 @@ function CollegeApplication() {
       alert('Application submitted successfully! We will notify you once the college reviews your application.');
       navigate('/student');
     } catch (error) {
-      logError('STUDENT', 'Failed to submit application', { error: error.message });
-      alert('Failed to submit application. Please try again.');
+      console.error('Application submission error:', error);
+      logError('STUDENT', 'Failed to submit application', { 
+        error: error.message,
+        code: error.code,
+        collegeId: college?.id,
+        studentId: auth.currentUser?.uid
+      });
+      
+      // Show more specific error message
+      let errorMessage = 'Failed to submit application. ';
+      if (error.code === 'permission-denied') {
+        errorMessage += 'Permission denied. Please try logging out and logging back in.';
+      } else if (error.code === 'unavailable') {
+        errorMessage += 'Network error. Please check your internet connection.';
+      } else {
+        errorMessage += `Error: ${error.message || 'Please try again.'}`;
+      }
+      
+      alert(errorMessage);
     } finally {
       setSubmitting(false);
     }

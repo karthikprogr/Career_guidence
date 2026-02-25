@@ -55,6 +55,14 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
     
+    // Applications collection
+    match /applications/{applicationId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+    
     // Logs collection
     match /logs/{logId} {
       allow read: if isAdmin();

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { logInfo, logError, logSuccess } from '../logger';
 import { generateQuestions, isGeminiAvailable } from '../services/geminiAPI';
@@ -107,11 +107,36 @@ function AdminDashboard() {
   });
 
   useEffect(() => {
+    console.log('Active tab changed to:', activeTab);
+    
+    // Verify admin user and role
+    const verifyUserRole = async () => {
+      if (auth.currentUser) {
+        console.log('Current user ID:', auth.currentUser.uid);
+        console.log('Current user email:', auth.currentUser.email);
+        
+        try {
+          const userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid));
+          if (userDoc.exists()) {
+            console.log('User role from Firestore:', userDoc.data().role);
+            console.log('Full user data:', userDoc.data());
+          } else {
+            console.error('User document does not exist in Firestore!');
+          }
+        } catch (error) {
+          console.error('Error fetching user role:', error);
+        }
+      }
+    };
+    
+    verifyUserRole();
+    
     if (activeTab === 'colleges') {
       fetchColleges();
     } else if (activeTab === 'questions') {
       fetchQuestions();
     } else if (activeTab === 'applications') {
+      console.log('Tab is applications, fetching...');
       fetchApplications();
     }
     
@@ -156,18 +181,37 @@ function AdminDashboard() {
   const fetchApplications = async () => {
     setLoading(true);
     try {
+      console.log('Fetching applications from Firestore...');
       const querySnapshot = await getDocs(collection(db, 'applications'));
+      console.log('Applications query result:', querySnapshot.docs.length, 'documents');
+      
       const appsData = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
         appliedAt: doc.data().appliedAt?.toDate()
       }));
+      
+      console.log('Applications data:', appsData);
+      console.table(appsData.map(app => ({
+        id: app.id,
+        studentName: app.studentName,
+        collegeName: app.collegeName,
+        status: app.status,
+        appliedAt: app.appliedAt
+      })));
+      
       // Sort by most recent first
       appsData.sort((a, b) => b.appliedAt - a.appliedAt);
       setApplications(appsData);
       logInfo('ADMIN', 'Applications fetched', { count: appsData.length });
     } catch (error) {
-      logError('ADMIN', 'Failed to fetch applications', { error: error.message });
+      console.error('Error fetching applications:', error);
+      logError('ADMIN', 'Failed to fetch applications', { 
+        error: error.message,
+        code: error.code,
+        details: error
+      });
+      alert(`Failed to fetch applications: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -1440,6 +1484,15 @@ function AdminDashboard() {
           <div className="tab-content">
             <div className="tab-header">
               <h2>Student Applications ({applications.length})</h2>
+              <button 
+                className="btn btn-primary"
+                onClick={() => {
+                  console.log('Manual refresh clicked');
+                  fetchApplications();
+                }}
+              >
+                🔄 Refresh
+              </button>
             </div>
 
             {loading && <div className="spinner"></div>}
@@ -1579,10 +1632,16 @@ function AdminDashboard() {
                 ))}
               </div>
             ) : (
-              <div className="card" style={{ padding: '4rem 2rem', textAlign: 'center' }}>
-                <h3>No applications yet</h3>
-                <p style={{ color: '#718096' }}>Applications from students will appear here</p>
-              </div>
+              !loading && (
+                <div className="empty-state" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+                  <p style={{ fontSize: '1.2rem', color: '#718096', marginBottom: '1rem' }}>
+                    No applications found.
+                  </p>
+                  <p style={{ fontSize: '0.9rem', color: '#a0aec0' }}>
+                    Applications will appear here once students submit them.
+                  </p>
+                </div>
+              )
             )}
           </div>
         )}

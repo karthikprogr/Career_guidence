@@ -72,13 +72,24 @@ function CollegeDetails() {
 
         <div className="college-details-card">
           <div className="college-header">
-            <div>
+            <div className="header-content">
               <h1>{college.name}</h1>
-              <p className="college-location"><LocationIcon size={20} /> {college.location}</p>
+              <p className="college-location">
+                <LocationIcon size={20} /> 
+                {college.city && college.state ? 
+                  `${college.city}, ${college.state}, ${college.country || 'India'}` : 
+                  college.location || 'Location not specified'
+                }
+              </p>
+              {college.type && (
+                <p className="college-type">
+                  <BuildingIcon size={18} /> {college.type}
+                </p>
+              )}
             </div>
             <div className="college-rank">
               <span>Rank</span>
-              <strong>#{college.ranking}</strong>
+              <strong>#{college.ranking || 'N/A'}</strong>
             </div>
           </div>
 
@@ -157,6 +168,27 @@ function CollegeDetails() {
             <div className="college-section">
               <h2><GraduationCapIcon size={24} /> Scholarships</h2>
               <p>{college.scholarships}</p>
+            </div>
+          )}
+
+          {/* Contact Information */}
+          {(college.contact || college.email || college.website) && (
+            <div className="college-section">
+              <h2>Contact Information</h2>
+              <div className="contact-info">
+                {college.contact && (
+                  <p><strong>Phone:</strong> {college.contact}</p>
+                )}
+                {college.email && (
+                  <p><strong>Email:</strong> <a href={`mailto:${college.email}`}>{college.email}</a></p>
+                )}
+                {college.website && (
+                  <p><strong>Website:</strong> <a href={college.website} target="_blank" rel="noopener noreferrer">{college.website}</a></p>
+                )}
+                {college.address && (
+                  <p><strong>Address:</strong> {college.address}</p>
+                )}
+              </div>
             </div>
           )}
 

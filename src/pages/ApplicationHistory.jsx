@@ -18,23 +18,38 @@ function ApplicationHistory() {
 
   const fetchApplications = async () => {
     try {
+      console.log('Fetching applications for student:', auth.currentUser.uid);
+      
+      // Simple query without orderBy to avoid index requirement
       const q = query(
         collection(db, 'applications'),
-        where('studentId', '==', auth.currentUser.uid),
-        orderBy('appliedAt', 'desc')
+        where('studentId', '==', auth.currentUser.uid)
       );
 
+      console.log('Executing query...');
       const querySnapshot = await getDocs(q);
+      console.log('Query result:', querySnapshot.docs.length, 'applications found');
+      
       const appData = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
         appliedAt: doc.data().appliedAt?.toDate()
       }));
 
+      // Sort locally instead of in query
+      appData.sort((a, b) => (b.appliedAt || 0) - (a.appliedAt || 0));
+      
+      console.log('Applications data:', appData);
       setApplications(appData);
       logInfo('STUDENT', 'Applications fetched', { count: appData.length });
     } catch (error) {
-      logError('STUDENT', 'Failed to fetch applications', { error: error.message });
+      console.error('Error fetching applications:', error);
+      logError('STUDENT', 'Failed to fetch applications', { 
+        error: error.message,
+        code: error.code,
+        fullError: error
+      });
+      alert(`Failed to load applications: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -197,7 +212,7 @@ function ApplicationHistory() {
                 <div className="application-actions">
                   <button
                     className="btn btn-secondary"
-                    onClick={() => navigate(`/college-details/${app.collegeId}`)}
+                    onClick={() => navigate(`/college/${app.collegeId}`)}
                   >
                     View College
                   </button>
