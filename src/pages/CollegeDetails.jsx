@@ -117,7 +117,7 @@ function CollegeDetails() {
               <div>
                 <p className="info-label">Annual Fees</p>
                 <p className="info-value">
-                  {college.fees ? `₹${college.fees.toLocaleString()}` : 'Not Available'}
+                  {college.fees ? (() => { const s={INR:'₹',USD:'$',GBP:'£',EUR:'€',AUD:'A$',CAD:'C$',SGD:'S$',CHF:'CHF ',SEK:'kr '}; return `${s[college.currency||'INR']||((college.currency||'INR')+' ')}${college.fees.toLocaleString()}`; })() : 'Not Available'}
                 </p>
               </div>
             </div>

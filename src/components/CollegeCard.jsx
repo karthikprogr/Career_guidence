@@ -5,10 +5,12 @@ import './CollegeCard.css';
 function CollegeCard({ college }) {
   const navigate = useNavigate();
 
-  // Helper function to safely format fees
-  const formatFees = (fees) => {
+  // Helper function to safely format fees with correct currency
+  const formatFees = (fees, currency) => {
     if (!fees && fees !== 0) return 'Not Available';
-    return `₹${fees.toLocaleString()}`;
+    const sym = currency || 'INR';
+    const symbols = { INR: '₹', USD: '$', GBP: '£', EUR: '€', AUD: 'A$', CAD: 'C$', SGD: 'S$', CHF: 'CHF ', SEK: 'kr ' };
+    return `${symbols[sym] || sym + ' '}${fees.toLocaleString()}`;
   };
 
   return (
@@ -20,9 +22,13 @@ function CollegeCard({ college }) {
       
       <div className="college-card-body">
         <div className="college-info">
-          <p><strong>Location:</strong> {college.location || 'Not specified'}</p>
-          <p><strong>Type:</strong> {college.type || 'Not specified'}</p>
-          <p><strong>Fees:</strong> {formatFees(college.fees)}/year</p>
+          <p><strong>Location:</strong> {college.location || [college.city, college.state, college.country].filter(Boolean).join(', ') || 'Not specified'}</p>
+          <p><strong>Type:</strong>{' '}
+            {(college.types && college.types.length > 0 ? college.types : (college.type ? [college.type] : ['Not specified'])).map((t, i) => (
+              <span key={i} style={{display:'inline-block',background:'#eff6ff',color:'#1d4ed8',fontSize:'0.72rem',fontWeight:600,padding:'0.1rem 0.45rem',borderRadius:'0.25rem',marginRight:'0.2rem'}}>{t}</span>
+            ))}
+          </p>
+          <p><strong>Fees:</strong> {formatFees(college.fees, college.currency)}/year</p>
           <p><strong>Min CGPA:</strong> {college.minCGPA || 'N/A'}</p>
         </div>
         

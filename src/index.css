@@ -28,6 +28,7 @@ body {
   background-color: var(--light-color);
   color: var(--text-color);
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 code {
@@ -226,19 +227,74 @@ code {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
+/* ── Bottom nav page offset (phone only) ──────────────── */
+@media (max-width: 480px) {
+  /* Push all page content above the fixed bottom nav */
+  .student-dashboard,
+  .selection-page,
+  .student-details-page,
+  .roadmap-page,
+  .college-list-page,
+  .aptitude-test-page,
+  .test-completion-page,
+  .college-details-page,
+  .college-application-page,
+  .college-comparison-page,
+  .application-history-page {
+    padding-bottom: 74px !important;
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .container {
-    padding: 0 0.5rem;
+    padding: 0 0.75rem;
   }
-  
+
   .btn {
     padding: 0.625rem 1.25rem;
     font-size: 0.875rem;
   }
-  
+
   .grid-2,
   .grid-3 {
     grid-template-columns: 1fr;
   }
+
+  /* Prevent content from overflowing viewport on mobile */
+  img, video, iframe, table {
+    max-width: 100%;
+  }
 }
+
+@media (max-width: 480px) {
+  html {
+    font-size: 15px;
+  }
+
+  .container {
+    padding: 0 0.65rem;
+  }
+
+  .btn {
+    padding: 0.6rem 1.1rem;
+    font-size: 0.875rem;
+    min-height: 44px;
+  }
+
+  .card {
+    padding: 1.1rem;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    font-size: 0.875rem;
+    min-height: 44px;
+  }
+
+  .alert {
+    font-size: 0.875rem;
+  }
+}
+

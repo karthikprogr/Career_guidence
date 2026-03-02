@@ -1,148 +1,99 @@
-# 🎓 Career Guidance Web Application
+﻿# Career Guidance Web Application
 
-[![Firebase](https://img.shields.io/badge/Firebase-Firestore-orange)](https://firebase.google.com/)
-[![React](https://img.shields.io/badge/React-18.2.0-blue)](https://reactjs.org/)
+[![React](https://img.shields.io/badge/React-18.2.0-61DAFB?logo=react)](https://reactjs.org/)
+[![Firebase](https://img.shields.io/badge/Firebase-10.7.1-FFCA28?logo=firebase)](https://firebase.google.com/)
+[![Vite](https://img.shields.io/badge/Vite-5.0.8-646CFF?logo=vite)](https://vitejs.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-> A comprehensive career guidance platform that helps students choose the right college and course based on their academic performance, preferences, and aptitude test results.
+A comprehensive career guidance platform that helps students and parents find the right college — in India or abroad — based on academic performance, entrance exam scores, career interests, location preferences, and aptitude test results.
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [About the Project](#about-the-project)
 - [Problem Statement](#problem-statement)
 - [Features](#features)
-- [Technologies Used](#technologies-used)
+- [Technology Stack](#technology-stack)
 - [Project Structure](#project-structure)
+- [System Architecture](#system-architecture)
+- [Application Workflow](#application-workflow)
+- [Modules](#modules)
+- [Pages](#pages)
 - [Getting Started](#getting-started)
 - [Firebase Setup](#firebase-setup)
-- [Usage Guide](#usage-guide)
-- [Modules](#modules)
+- [Environment Variables](#environment-variables)
+- [Firestore Data Model](#firestore-data-model)
+- [Logging](#logging)
 - [Security](#security)
+- [Test Cases](#test-cases)
 - [Deployment](#deployment)
-- [Testing](#testing)
-- [Contributing](#contributing)
+- [Coding Standards](#coding-standards)
 - [License](#license)
 
 ---
 
-## 🎯 About the Project
+## Problem Statement
 
-The **Career Guidance Application** is a web-based platform designed to assist students and parents in making informed decisions about higher education. It evaluates student eligibility, conducts aptitude assessments, and recommends suitable colleges based on multiple criteria including CGPA, exam scores, location preferences, and aptitude test performance.
+Students and parents often struggle to access comprehensive information about colleges — tuition fees, housing, eligibility requirements, placements, scholarships, and more. This application provides:
 
-### Key Highlights
+- A centralised platform covering Indian and international institutions
+- Eligibility evaluation based on CGPA, entrance exam scores, and aptitude test results
+- Location-based filtering (India or Abroad)
+- Personalised aptitude assessment aligned to the student's career domain
+- Step-by-step college application and registration guidance
 
-- **Role-Based Access**: Separate interfaces for Students and Admins
-- **Intelligent Filtering**: Advanced college recommendation system
-- **Aptitude Assessment**: Comprehensive MCQ-based test with 30 minutes timer
-- **Real-Time Data**: Firebase Firestore for instant updates
-- **Secure Authentication**: Firebase Authentication with role management
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
-- **Comprehensive Logging**: Track all user actions for analytics
+The platform covers Engineering, Management, Medical, Law, Science, and Arts & Humanities disciplines.
 
 ---
 
-## 🔍 Problem Statement
+## Features
 
-Students and parents often face challenges in finding comprehensive information about colleges, including tuition fees, eligibility requirements, campus placements, facilities, scholarships, and more. This application provides:
+### Student Features
 
-- **Centralized Information**: All college details in one place
-- **Eligibility Evaluation**: Automatic verification based on CGPA and exam scores
-- **Location-Based Search**: Filter colleges by India or Abroad
-- **Aptitude Testing**: Assess verbal, quantitative, and general knowledge skills
-- **Personalized Recommendations**: Tailored suggestions based on student profile
+| Feature | Description |
+|---------|-------------|
+| Registration & Login | Email/password auth with role selection |
+| Profile Management | CGPA, entrance exam scores (JEE/NEET/CAT/GMAT), personal info, name & password change |
+| Career Selection | Choose from Engineering, Management, Medical, Law, Science, Arts |
+| Location Selection | India or Abroad study preference |
+| Career Roadmap | AI-generated step-by-step guidance for chosen career path |
+| College List | Filtered by career, location, fees, ranking with eligibility highlighting |
+| College Details | Full info — fees (multi-currency), facilities, scholarships, accreditation, contact |
+| College Comparison | Side-by-side compare up to 3 colleges |
+| College Application | Online registration with CGPA + aptitude score eligibility check |
+| Application History | Track all submitted applications and their status |
+| Aptitude Test | 30-min, 30-question domain-personalised MCQ test |
+| Test Completion | Score, performance level, correct/wrong count, next-step recommendations |
 
----
+### Admin Features
 
-## ✨ Features
-
-### For Students
-
-- ✅ **User Registration & Authentication**
-  - Email/password signup and login
-  - Secure session management
-  
-- ✅ **Profile Management**
-  - Academic details (CGPA, exam scores)
-  - Personal information
-  - Career and location preferences
-  
-- ✅ **Career & Location Selection**
-  - Choose from Engineering, Management, Medical, Law, Science, Arts
-  - Select India or Abroad for study location
-  
-- ✅ **Aptitude Test**
-  - 30-minute timed test
-  - 30 questions across 3 categories:
-    - Verbal (10 questions)
-    - Quantitative (10 questions)
-    - General Knowledge (10 questions)
-  - Immediate score calculation
-  - Performance analysis
-  
-- ✅ **College Search & Filter**
-  - Filter by location, type, fees, ranking
-  - Eligibility-based recommendations
-  - Detailed college information
-  
-- ✅ **College Details Page**
-  - Comprehensive college information
-  - Fees, ranking, placement rate
-  - Facilities and scholarships
-  - Registration process
-
-### For Admins
-
-- ✅ **College Management**
-  - Add new colleges
-  - Update college information
-  - Delete colleges
-  
-- ✅ **Aptitude Question Management**
-  - Add questions with multiple options
-  - Set correct answers
-  - Categorize by type (Verbal/Quantitative/General)
-  - Set difficulty levels (Easy/Medium/Hard)
-  
-- ✅ **Dashboard Analytics**
-  - View all colleges
-  - Manage question bank
-
-### General Features
-
-- ✅ **Responsive Design**: Mobile, tablet, and desktop friendly
-- ✅ **Real-Time Updates**: Firebase Firestore synchronization
-- ✅ **Secure Routes**: Protected pages based on authentication
-- ✅ **Comprehensive Logging**: All actions logged for audit trail
-- ✅ **Error Handling**: User-friendly error messages
+| Feature | Description |
+|---------|-------------|
+| College Management | Add, edit, delete colleges (India + Abroad with multi-currency support) |
+| Quick College Seeding | One-click load of 30+ curated colleges (India + Abroad) |
+| Question Management | Add/edit/delete MCQs by category, difficulty, and career domain |
+| Applications Management | View all student applications with student details |
+| Student Management | View all registered students |
 
 ---
 
-## 🛠 Technologies Used
+## Technology Stack
 
-### Frontend
-
-- **React 18.2.0** - UI library
-- **React Router DOM 6.20.0** - Client-side routing
-- **HTML5 & CSS3** - Markup and styling
-- **JavaScript (ES6+)** - Programming logic
-
-### Backend
-
-- **Firebase Authentication** - User authentication
-- **Firebase Firestore** - NoSQL cloud database
-- **Firebase Hosting** - Web hosting
-
-### Development Tools
-
-- **Create React App** - Project scaffolding
-- **Git** - Version control
-- **VS Code** - Code editor
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18.2.0, React Router DOM 6.20 |
+| UI Icons | Lucide React |
+| Backend / Auth | Firebase Authentication (Email/Password) |
+| Database | Firebase Firestore (NoSQL) |
+| Hosting | Firebase Hosting |
+| Build Tool | Vite 5.0.8 |
+| Language | JavaScript ES6+ |
+| Styling | CSS3 (dark theme, responsive, mobile-first) |
+| AI Integration | Groq SDK (career roadmap generation) |
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 career-guidance-app/
@@ -150,37 +101,48 @@ career-guidance-app/
 │   └── index.html
 ├── src/
 │   ├── components/
-│   │   ├── Navbar.js
+│   │   ├── CollegeCard.jsx         # Reusable card with multi-currency fees
+│   │   ├── CollegeCard.css
+│   │   ├── Icons.jsx               # Custom SVG icon components
+│   │   ├── Modals.css              # Shared modal styles
+│   │   ├── Navbar.jsx              # Responsive nav + mobile bottom bar
 │   │   ├── Navbar.css
-│   │   ├── ProtectedRoute.js
-│   │   ├── CollegeCard.js
-│   │   └── CollegeCard.css
+│   │   └── ProtectedRoute.jsx      # Role-based route guard
 │   ├── pages/
-│   │   ├── Login.js
-│   │   ├── SignUp.js
-│   │   ├── Auth.css
-│   │   ├── StudentDashboard.js
-│   │   ├── StudentDashboard.css
-│   │   ├── AdminDashboard.js
+│   │   ├── AdminDashboard.jsx      # Admin: colleges, questions, applications, students
 │   │   ├── AdminDashboard.css
-│   │   ├── CareerSelection.js
-│   │   ├── LocationSelection.js
-│   │   ├── Selection.css
-│   │   ├── StudentDetails.js
-│   │   ├── StudentDetails.css
-│   │   ├── CollegeList.js
-│   │   ├── CollegeList.css
-│   │   ├── CollegeDetails.js
-│   │   ├── CollegeDetails.css
-│   │   ├── AptitudeTest.js
+│   │   ├── ApplicationHistory.jsx  # Student: submitted applications
+│   │   ├── AptitudeTest.jsx        # Domain-aware 30-question timed test
 │   │   ├── AptitudeTest.css
-│   │   ├── TestCompletion.js
+│   │   ├── Auth.css                # Shared login/signup styles
+│   │   ├── CareerRoadmap.jsx       # AI-generated career roadmap
+│   │   ├── CareerSelection.jsx     # Pick career domain
+│   │   ├── CollegeApplication.jsx  # Registration form + eligibility check
+│   │   ├── CollegeApplication.css
+│   │   ├── CollegeComparison.jsx   # Side-by-side college comparison
+│   │   ├── CollegeDetails.jsx      # Full college info page
+│   │   ├── CollegeDetails.css
+│   │   ├── CollegeList.jsx         # Filtered college listing
+│   │   ├── CollegeList.css
+│   │   ├── LandingPage.jsx         # Public home page
+│   │   ├── LandingPage.css
+│   │   ├── LocationSelection.jsx   # India / Abroad selection
+│   │   ├── Login.jsx               # Login with demo credentials
+│   │   ├── Selection.css           # Career + location selection styles
+│   │   ├── SignUp.jsx              # Student / Admin registration
+│   │   ├── StudentDashboard.jsx    # Student home with quick actions
+│   │   ├── StudentDashboard.css
+│   │   ├── StudentDetails.jsx      # Profile: personal info, academics, password
+│   │   ├── StudentDetails.css
+│   │   ├── TestCompletion.jsx      # Score display + next steps
 │   │   └── TestCompletion.css
-│   ├── App.js
-│   ├── firebase.js
-│   ├── logger.js
-│   ├── index.js
-│   └── index.css
+│   ├── utils/
+│   │   └── addSampleColleges.js    # Bulk college seeding (India + Abroad)
+│   ├── App.jsx                     # Route definitions + auth state
+│   ├── firebase.jsx                # Firebase app initialisation
+│   ├── index.css                   # Global dark-theme CSS variables
+│   ├── logger.jsx                  # Structured logging utility
+│   └── main.jsx                    # React entry point
 ├── .env.example
 ├── .gitignore
 ├── firebase.json
@@ -192,437 +154,429 @@ career-guidance-app/
 
 ---
 
-## 🚀 Getting Started
+## System Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                     React Frontend                       │
+│  ┌──────────┐  ┌───────────┐  ┌──────────────────────┐  │
+│  │  Public  │  │  Student  │  │       Admin          │  │
+│  │  Pages   │  │  Routes   │  │       Routes         │  │
+│  └────┬─────┘  └─────┬─────┘  └──────────┬───────────┘  │
+│       │              │                   │               │
+│  ┌────▼──────────────▼───────────────────▼───────────┐  │
+│  │          React Router (Protected Routes)            │  │
+│  └────────────────────────┬────────────────────────────┘  │
+└───────────────────────────┼─────────────────────────────┘
+                            │
+                   ┌────────▼────────┐
+                   │  Firebase SDK   │
+                   └────────┬────────┘
+          ┌─────────────────┼──────────────────┐
+          ▼                 ▼                  ▼
+  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+  │  Firebase    │  │  Firestore   │  │  Groq API    │
+  │  Auth        │  │  Database    │  │  (Roadmap)   │
+  └──────────────┘  └──────────────┘  └──────────────┘
+```
+
+**Firestore Collections:**
+
+| Collection | Purpose |
+|-----------|---------|
+| `users` | Role assignment (student / admin) |
+| `students` | Profile, CGPA, exam scores, preferences, aptitude score |
+| `colleges` | All college details — India + Abroad, multi-currency |
+| `questions` | Aptitude MCQs: category, difficulty, career domain |
+| `applications` | Student college applications with status |
+| `testResults` | Per-student aptitude test results |
+| `logs` | System activity audit trail |
+
+---
+
+## Application Workflow
+
+```
+User Visit
+    │
+    ├─ Not logged in ──► Landing Page ──► Login / Sign Up
+    │
+    └─ Logged in
+           │
+           ├─ Admin ──► Admin Dashboard
+           │              ├─ Manage Colleges (Add / Edit / Delete / Bulk Seed)
+           │              ├─ Manage Questions (Add / Edit / Delete)
+           │              ├─ View Applications
+           │              └─ View Students
+           │
+           └─ Student ──► Student Dashboard
+                           │
+                           ├─ 1. Complete Profile (CGPA, exam scores, personal info)
+                           │
+                           ├─ 2. Select Career (Engineering / Management / Medical /
+                           │                    Law / Science / Arts)
+                           │
+                           ├─ 3. Select Location (India or Abroad)
+                           │
+                           ├─ 4. Browse College List
+                           │      ├─ Filter by location, type, fees, ranking
+                           │      ├─ View full college details
+                           │      ├─ Compare colleges side-by-side
+                           │      └─ Apply to college (eligibility checked)
+                           │
+                           ├─ 5. Take Aptitude Test (30 min, 30 domain MCQs)
+                           │      └─ View Score + Performance Analysis
+                           │
+                           └─ 6. View Career Roadmap (AI-generated)
+```
+
+---
+
+## Modules
+
+### 1. Authentication Module
+Files: `Login.jsx`, `SignUp.jsx`, `ProtectedRoute.jsx`
+- Email/password sign up and login via Firebase Auth
+- Role selection at sign-up (Student / Admin)
+- Protected routes enforce role-based access
+- Demo credentials shown on login page
+
+### 2. Student Profile Module
+Files: `StudentDetails.jsx`
+- Editable: full name, phone, DOB, address, CGPA, academic percentages
+- Entrance exam scores: JEE / NEET / CAT / GMAT / Other
+- Change password with re-authentication
+
+### 3. Career & Location Module
+Files: `CareerSelection.jsx`, `LocationSelection.jsx`
+- Six career domains stored in `students/{uid}.preferences.career`
+- Two locations stored in `students/{uid}.preferences.location`
+- Drive college filtering and aptitude test domain
+
+### 4. College Module
+Files: `CollegeList.jsx`, `CollegeDetails.jsx`, `CollegeCard.jsx`, `CollegeComparison.jsx`
+- Dynamic filters: location, type, fee range, ranking
+- Multi-currency fees display (INR / USD / GBP / EUR / AUD / CAD / SGD / CHF / SEK)
+- Eligibility badge based on student CGPA
+- Side-by-side comparison of up to 3 colleges
+
+### 5. College Application Module
+Files: `CollegeApplication.jsx`, `ApplicationHistory.jsx`
+- Full registration form with personal + academic details
+- CGPA eligibility check with visual pass/fail banner
+- Aptitude test score shown in context
+- Application saved with `pending` status
+
+### 6. Aptitude Test Module
+Files: `AptitudeTest.jsx`, `TestCompletion.jsx`
+- 30 questions, 30-minute countdown
+- 10 verbal + 10 quantitative + 10 domain-specific (based on career)
+- Career personalisation banner with "Change Career Path" option
+- Performance levels: Excellent / Good / Average / Needs Improvement
+
+### 7. Career Roadmap Module
+File: `CareerRoadmap.jsx`
+- AI-generated step-by-step roadmap via Groq SDK
+- Personalised to student's selected career
+
+### 8. Admin Module
+File: `AdminDashboard.jsx`
+- Tabbed interface: Colleges | Questions | Applications | Students
+- College CRUD with multi-currency support
+- Question CRUD with career domain tagging
+- View and manage all student applications
+
+### 9. Logging Module
+File: `logger.jsx`
+- Levels: INFO / SUCCESS / WARNING / ERROR
+- All actions logged: auth, profile, test, applications, admin changes
+- Stored in Firestore `logs` collection
+
+---
+
+## Pages
+
+| # | Page | Route | Description |
+|---|------|--------|-------------|
+| 1 | Landing Page | `/` | Public home page |
+| 2 | Login | `/login` | Student / Admin login |
+| 3 | Sign Up | `/signup` | Student / Admin registration |
+| 4 | Student Dashboard | `/student` | Home with quick actions and stats |
+| 5 | Career Selection | `/career-selection` | Pick career domain |
+| 6 | Location Selection | `/location-selection` | India or Abroad |
+| 7 | College List | `/college-list` | Filtered, sortable listings |
+| 8 | College Details | `/college/:id` | Full college information |
+| 9 | College Comparison | `/college-compare` | Side-by-side comparison |
+| 10 | College Application | `/college-apply/:collegeId` | Registration + eligibility |
+| 11 | Application History | `/applications` | My submitted applications |
+| 12 | Student Details | `/student-details` | Profile and academic info |
+| 13 | Aptitude Test | `/aptitude-test` | Domain-aware timed test |
+| 14 | Test Completion | `/test-completion` | Score and analysis |
+| 15 | Career Roadmap | `/career-roadmap` | AI-generated guidance |
+| 16 | Admin Dashboard | `/admin` | Full admin panel |
+
+---
+
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn
+- Node.js v18+
+- npm v9+
 - Firebase account
-- Git
 
 ### Installation
-
-1. **Clone the repository**
 
 ```bash
 git clone https://github.com/yourusername/career-guidance-app.git
 cd career-guidance-app
-```
-
-2. **Install dependencies**
-
-```bash
 npm install
-```
-
-3. **Configure environment variables**
-
-Copy `.env.example` to `.env`:
-
-```bash
-copy .env.example .env
-```
-
-Edit `.env` and add your Firebase configuration:
-
-```env
-VITE_FIREBASE_API_KEY=your_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-VITE_FIREBASE_APP_ID=your_app_id
-```
-
-4. **Start the development server**
-
-```bash
+copy .env.example .env   # then fill in Firebase config
 npm run dev
 ```
 
-The app will open at [http://localhost:3000](http://localhost:3000)
+App runs at `http://localhost:5173`
 
 ---
 
-## 🔥 Firebase Setup
+## Firebase Setup
 
-### 1. Create Firebase Project
+1. [Firebase Console](https://console.firebase.google.com/) → New project
+2. **Authentication** → Sign-in method → Enable Email/Password
+3. **Firestore** → Create database → Production mode
+4. Project Settings → Add Web App → copy config to `.env`
+5. Paste `firestore.rules` into Firestore → Rules → Publish
 
-1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Click "Add Project"
-3. Enter project name: `career-guidance-app`
-4. Follow the setup wizard
+---
 
-### 2. Enable Authentication
+## Environment Variables
 
-1. Go to Authentication → Sign-in method
-2. Enable **Email/Password** provider
-3. Save changes
+```env
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_GROQ_API_KEY=your_groq_api_key
+```
 
-### 3. Create Firestore Database
+---
 
-1. Go to Firestore Database
-2. Click "Create database"
-3. Choose **Start in production mode**
-4. Select location (e.g., us-central)
-5. Create database
+## Firestore Data Model
 
-### 4. Deploy Security Rules
+### `students/{uid}`
+```json
+{
+  "name": "string",
+  "email": "string",
+  "phone": "string",
+  "dob": "string",
+  "cgpa": "number",
+  "tenthPercentage": "number",
+  "twelfthPercentage": "number",
+  "examScores": { "jee": "number", "neet": "number", "cat": "number", "gmat": "number" },
+  "preferences": { "career": "engineering|management|medical|law|science|arts", "location": "india|abroad" },
+  "aptitudeScore": "number"
+}
+```
 
-Copy the contents of `firestore.rules` to Firebase Console:
+### `colleges/{id}`
+```json
+{
+  "name": "string",
+  "type": "Engineering|Management|Medical|Law|Science|Arts",
+  "location": "string",
+  "country": "string",
+  "fees": "number",
+  "currency": "INR|USD|GBP|EUR|AUD|CAD|SGD|CHF|SEK",
+  "minCGPA": "number",
+  "ranking": "number",
+  "placementRate": "number",
+  "description": "string",
+  "facilities": "string",
+  "scholarships": "string",
+  "accreditation": "string",
+  "website": "string"
+}
+```
 
-1. Go to Firestore Database → Rules
-2. Paste the rules from `firestore.rules`
-3. Publish changes
+### `questions/{id}`
+```json
+{
+  "question": "string",
+  "options": ["string","string","string","string"],
+  "correctAnswer": "number (0-3)",
+  "category": "verbal|quantitative|general|engineering|management|medical|law|science|arts",
+  "difficulty": "easy|medium|hard"
+}
+```
 
-### 5. Get Firebase Configuration
+### `applications/{id}`
+```json
+{
+  "studentId": "string",
+  "collegeId": "string",
+  "collegeName": "string",
+  "cgpa": "number",
+  "testScore": "number",
+  "preferredCourse": "string",
+  "status": "pending|accepted|rejected",
+  "appliedAt": "timestamp"
+}
+```
 
-1. Go to Project Settings → General
-2. Scroll to "Your apps" section
-3. Click Web icon (</>) to add web app
-4. Copy the configuration object
-5. Add values to your `.env` file
+---
 
-### 6. Deploy to Firebase Hosting (Optional)
+## Logging
+
+```javascript
+import { logInfo, logSuccess, logError, logWarning } from '../logger';
+
+logInfo('MODULE', 'Description', { key: value });
+logSuccess('MODULE', 'Action completed', { result });
+logError('MODULE', 'Action failed', { error: error.message });
+```
+
+Logged events: login/logout, profile update, career selection, test start/submit, college view/apply, all admin CRUD operations, all Firestore errors. Stored in Firestore `logs` collection.
+
+---
+
+## Security
+
+- All Firestore reads/writes require authentication
+- Students can only access their own profile data
+- Admins-only: college and question management
+- Application eligibility validated before save
+- Passwords require minimum 6 chars; re-auth required for password change
+- All secrets in `.env` — never committed to Git
+
+---
+
+## Test Cases
+
+### TC-01: Student Registration
+| Step | Action | Expected |
+|------|--------|---------|
+| 1 | Sign up with valid details, role = Student | Redirected to `/student` |
+| 2 | Register with existing email | Error: "Email already in use" |
+| 3 | Password under 6 chars | Error: "Password too short" |
+
+### TC-02: Student Login
+| Step | Action | Expected |
+|------|--------|---------|
+| 1 | Login with correct credentials | Redirected to Student Dashboard |
+| 2 | Login with wrong password | Error: "Invalid credentials" |
+| 3 | Admin URL accessed by student | Redirected to `/student` |
+
+### TC-03: Profile Management
+| Step | Action | Expected |
+|------|--------|---------|
+| 1 | Enter CGPA = 8.5, save | `students/{uid}.cgpa = 8.5` in Firestore |
+| 2 | Enter JEE = 12000, save | `examScores.jee = 12000` in Firestore |
+| 3 | Change display name | Firebase Auth + Firestore `name` both updated |
+| 4 | Change password with wrong current password | Error: "Incorrect current password" |
+
+### TC-04: Career & Location Selection
+| Step | Action | Expected |
+|------|--------|---------|
+| 1 | Select "Engineering" | `preferences.career = 'engineering'` saved |
+| 2 | Select "Abroad" | `preferences.location = 'abroad'` saved |
+| 3 | Go to college list | Pre-filtered for abroad engineering colleges |
+
+### TC-05: College List Filtering
+| Step | Action | Expected |
+|------|--------|---------|
+| 1 | Max Fees = 500000 | Only colleges with fees ≤ 500000 shown |
+| 2 | Type = Medical | Only medical colleges shown |
+| 3 | Sort by Ranking | Rankings shown in ascending order |
+| 4 | Student CGPA 7.0, college min 8.0 | Card shows "Not Eligible" badge |
+
+### TC-06: College Application
+| Step | Action | Expected |
+|------|--------|---------|
+| 1 | CGPA ≥ minCGPA, fill form, submit | Application saved with status = "pending" |
+| 2 | CGPA < minCGPA, try submit | Alert: "CGPA does not meet requirement" |
+| 3 | Open `/applications` | All applications listed with status |
+
+### TC-07: Aptitude Test Domain Personalisation
+| Step | Action | Expected |
+|------|--------|---------|
+| 1 | Career = "Medical", open test | Banner shows "Personalized for Medical"; 10 medical questions in section 3 |
+| 2 | No career set | Section 3 uses general knowledge |
+| 3 | Click "Change Career Path" | Navigated to `/career-selection` |
+| 4 | Timer hits 0:00 | Test auto-submits |
+
+### TC-08: Aptitude Test Scoring
+| Step | Action | Expected |
+|------|--------|---------|
+| 1 | 24/30 correct | Score = 80%, "Excellent" |
+| 2 | 0/30 correct | Score = 0%, "Needs Improvement" |
+| 3 | Complete test | `testResults/{uid}` and `students/{uid}.aptitudeScore` written |
+
+### TC-09: Admin College Management
+| Step | Action | Expected |
+|------|--------|---------|
+| 1 | Add college with all fields | College appears in student listing |
+| 2 | Edit college name | Updated in Firestore and UI |
+| 3 | Delete college | Removed from Firestore |
+| 4 | Add abroad college with USD currency | Fees shown as "$57,986" not "₹57,986" |
+| 5 | Click "Add Simple Colleges" | 30+ colleges added across all types |
+
+### TC-10: Admin Question Management
+| Step | Action | Expected |
+|------|--------|---------|
+| 1 | Add verbal question | Appears in question bank |
+| 2 | Set category = "Engineering" | Engineering students get this question in section 3 |
+| 3 | Delete question | Removed from Firestore |
+
+### TC-11: Multi-Currency Fees
+| Step | Action | Expected |
+|------|--------|---------|
+| 1 | Indian college (INR) on card | Shows "₹1,00,000" |
+| 2 | US college (USD) on card | Shows "$57,986" |
+| 3 | UK college (GBP) on detail page | Shows "£35,000" |
+| 4 | Swiss college (CHF) on application page | Shows "CHF 730" |
+
+### TC-12: Responsive Design
+| Step | Action | Expected |
+|------|--------|---------|
+| 1 | View on 375px mobile | Bottom nav bar visible; top pill nav hidden |
+| 2 | View on 1200px desktop | Top pill nav visible; bottom bar hidden |
+| 3 | College list on 768px tablet | 2-column card grid |
+
+---
+
+## Deployment
 
 ```bash
-# Install Firebase CLI
+npm run build
 npm install -g firebase-tools
-
-# Login to Firebase
 firebase login
-
-# Initialize Firebase
-firebase init
-
-# Select:
-# - Hosting
-# - Firestore (rules and indexes)
-
-# Build the app
-npm run build
-
-# Deploy
+firebase init    # select Hosting + Firestore
 firebase deploy
 ```
 
----
-
-## 📖 Usage Guide
-
-### For Students
-
-#### 1. Sign Up
-
-1. Navigate to the app
-2. Click "Sign Up"
-3. Fill in details:
-   - Full Name
-   - Email
-   - Password
-   - Select Role: **Student**
-4. Click "Sign Up"
-
-#### 2. Complete Profile
-
-1. After login, go to Dashboard
-2. Click "Complete Profile"
-3. Enter academic details:
-   - CGPA
-   - Entrance exam scores (JEE, NEET, CAT, etc.)
-   - Phone number
-   - Date of birth
-   - Address
-4. Save details
-
-#### 3. Select Career & Location
-
-1. Choose career path (Engineering, Management, etc.)
-2. Select location preference (India or Abroad)
-3. Confirm selections
-
-#### 4. Take Aptitude Test
-
-1. Go to Dashboard → Start Test
-2. Read instructions carefully
-3. Complete 30 questions in 30 minutes
-4. Submit test
-5. View score and performance
-
-#### 5. Browse Colleges
-
-1. Navigate to "Colleges" from navbar
-2. Use filters:
-   - Location
-   - Type
-   - Fees range
-   - Ranking
-3. View eligible colleges
-4. Click on college for details
-
-### For Admins
-
-#### 1. Sign Up as Admin
-
-1. Click "Sign Up"
-2. Select Role: **Admin**
-3. Complete registration
-
-#### 2. Add Colleges
-
-1. Go to Admin Dashboard
-2. Click "Colleges Management" tab
-3. Click "Add College"
-4. Fill in college details:
-   - Name
-   - Location (India/Abroad)
-   - Type
-   - Fees
-   - Ranking
-   - Min CGPA
-   - Placement Rate
-   - Description
-   - Facilities
-   - Scholarships
-5. Submit
-
-#### 3. Add Aptitude Questions
-
-1. Go to "Aptitude Questions" tab
-2. Click "Add Question"
-3. Enter question details:
-   - Question text
-   - Category (Verbal/Quantitative/General)
-   - Difficulty (Easy/Medium/Hard)
-   - 4 options
-   - Correct answer
-4. Submit
+Live at: `https://your-project-id.web.app`
 
 ---
 
-## 📦 Modules
+## Coding Standards
 
-### 1. Authentication Module
-
-- **Files**: `Login.js`, `SignUp.js`
-- **Features**:
-  - Email/password authentication
-  - Role-based registration (Student/Admin)
-  - Secure session management
-  - Protected routes
-
-### 2. Student Module
-
-- **Files**: `StudentDashboard.js`, `StudentDetails.js`, `CareerSelection.js`, `LocationSelection.js`
-- **Features**:
-  - Profile management
-  - Career and location selection
-  - Academic details management
-  - Dashboard overview
-
-### 3. Admin Module
-
-- **Files**: `AdminDashboard.js`
-- **Features**:
-  - College CRUD operations
-  - Aptitude question management
-  - Dashboard analytics
-
-### 4. College Module
-
-- **Files**: `CollegeList.js`, `CollegeDetails.js`, `CollegeCard.js`
-- **Features**:
-  - Advanced filtering
-  - Eligibility checking
-  - Detailed college information
-  - Registration process guide
-
-### 5. Aptitude Test Module
-
-- **Files**: `AptitudeTest.js`, `TestCompletion.js`
-- **Features**:
-  - 30-minute timed test
-  - 30 MCQ questions
-  - 3 categories (Verbal, Quantitative, General)
-  - Immediate scoring
-  - Performance analysis
-
-### 6. Logging Module
-
-- **File**: `logger.js`
-- **Features**:
-  - Comprehensive action logging
-  - Log levels (INFO, WARNING, ERROR, SUCCESS)
-  - Firebase storage
-  - Console output for development
+- **Modular**: Each feature is a self-contained page or component
+- **Safe**: No hardcoded secrets; Firestore rules enforce server-side security
+- **Testable**: Pure helpers (`formatFees`, `shuffleArray`, `calculateScore`) are isolated
+- **Maintainable**: Consistent naming conventions; CSS co-located with component
+- **Portable**: `.env` for all environment config; works on any OS
+- **Firebase-first**: All data via Firestore SDK with structured error handling
+- **Logging**: Every significant action logged via `logger.jsx` to Firestore
 
 ---
 
-## 🔒 Security
+## License
 
-### Firestore Security Rules
-
-The application implements strict security rules:
-
-- **Authentication Required**: All operations require authenticated users
-- **Role-Based Access**:
-  - Students can only read/write their own data
-  - Admins can manage colleges and questions
-  - Logs are admin-readable only
-- **Data Validation**: Rules validate data types and required fields
-
-### Best Practices Implemented
-
-- ✅ Environment variables for sensitive data
-- ✅ Client-side route protection
-- ✅ Server-side security rules
-- ✅ Password requirements (min 6 characters)
-- ✅ Input validation
-- ✅ Error handling
+MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
-## 🌐 Deployment
-
-### Deploy to Firebase Hosting
-
-1. **Build the production app**
-
-```bash
-npm run build
-```
-
-2. **Initialize Firebase** (if not done)
-
-```bash
-firebase init
-```
-
-3. **Deploy**
-
-```bash
-firebase deploy
-```
-
-Your app will be live at: `https://your-project-id.web.app`
-
-### Deploy Security Rules
-
-```bash
-firebase deploy --only firestore:rules
-```
-
-### Deploy Indexes
-
-```bash
-firebase deploy --only firestore:indexes
-```
-
----
-
-## 🧪 Testing
-
-### Manual Testing Checklist
-
-#### Authentication
-- [ ] Sign up as Student
-- [ ] Sign up as Admin
-- [ ] Login with valid credentials
-- [ ] Login with invalid credentials
-- [ ] Logout
-
-#### Student Flow
-- [ ] Complete profile
-- [ ] Select career
-- [ ] Select location
-- [ ] Take aptitude test
-- [ ] Browse colleges
-- [ ] Filter colleges
-- [ ] View college details
-
-#### Admin Flow
-- [ ] Add college
-- [ ] Delete college
-- [ ] Add aptitude question
-- [ ] Delete question
-
-#### General
-- [ ] Responsive design (mobile, tablet, desktop)
-- [ ] Navigation between pages
-- [ ] Error messages display
-- [ ] Loading states work
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 👥 Authors
-
-- **Your Name** - *Initial work* - [Your GitHub](https://github.com/yourusername)
-
----
-
-## 🙏 Acknowledgments
-
-- Unified Mentor for the internship opportunity
-- Firebase for backend infrastructure
-- React community for excellent documentation
-
----
-
-## 📞 Contact
-
-For queries or support:
-
-- Email: your.email@example.com
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
-
----
-
-## 📸 Screenshots
-
-### Student Dashboard
-![Student Dashboard](screenshots/student-dashboard.png)
-
-### Aptitude Test
-![Aptitude Test](screenshots/aptitude-test.png)
-
-### College List
-![College List](screenshots/college-list.png)
-
-### Admin Dashboard
-![Admin Dashboard](screenshots/admin-dashboard.png)
-
----
-
-## 🗺️ Roadmap
-
-- [ ] Add email notifications
-- [ ] Implement advanced analytics
-- [ ] Add PDF report generation
-- [ ] Integrate payment gateway for applications
-- [ ] Add chat support
-- [ ] Implement college comparison feature
-- [ ] Add student community forum
-
----
-
-**Made with ❤️ for Unified Mentor Internship**
+**Built for Unified Mentor Internship**

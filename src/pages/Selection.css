@@ -1,7 +1,7 @@
 .selection-page {
   min-height: calc(100vh - 80px);
   padding: 2rem 0 4rem;
-  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #1e40af 100%);
+  background: #0f172a;
 }
 
 .selection-header {
@@ -34,10 +34,10 @@
 }
 
 .career-detail-card {
-  background: #ffffff;
+  background: #1e293b;
   border-radius: 1rem;
   padding: 1.75rem;
-  border: 3px solid transparent;
+  border: 3px solid rgba(255,255,255,0.06);
   transition: all 0.3s ease;
   cursor: pointer;
 }
@@ -49,7 +49,7 @@
 
 .career-detail-card.selected {
   border-color: #10b981;
-  background: #f0fdf4;
+  background: rgba(16,185,129,0.08);
 }
 
 .career-card-header {
@@ -77,13 +77,13 @@
 .career-card-title h3 {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #f1f5f9;
   margin: 0;
 }
 
 .career-duration {
   font-size: 0.8rem;
-  color: #64748b;
+  color: #94a3b8;
   font-weight: 500;
 }
 
@@ -106,7 +106,7 @@
 
 .career-card-desc {
   font-size: 0.9rem;
-  color: #64748b;
+  color: #94a3b8;
   line-height: 1.6;
   margin-bottom: 1rem;
 }
@@ -117,7 +117,7 @@
   gap: 0.5rem;
   margin-bottom: 1rem;
   padding: 0.75rem;
-  background: #f8fafc;
+  background: rgba(255,255,255,0.04);
   border-radius: 0.5rem;
 }
 
@@ -129,13 +129,13 @@
 
 .info-label {
   font-size: 0.8rem;
-  color: #64748b;
+  color: #94a3b8;
   font-weight: 500;
 }
 
 .info-value {
   font-size: 0.8rem;
-  color: #1e293b;
+  color: #f1f5f9;
   font-weight: 600;
 }
 
@@ -153,14 +153,14 @@
 .demand-growing { background: #fce7f3; color: #9d174d; }
 
 .career-expand-btn {
-  width: 100%;
+  flex: 1;
   background: none;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 0.5rem;
   padding: 0.6rem;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #2563eb;
+  color: #93c5fd;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -170,14 +170,45 @@
 }
 
 .career-expand-btn:hover {
-  background: #eff6ff;
-  border-color: #2563eb;
+  background: rgba(255,255,255,0.07);
+  border-color: #93c5fd;
+}
+
+.career-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.career-continue-btn {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 0.5rem;
+  padding: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.career-continue-btn.active,
+.career-continue-btn:hover {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: #6366f1;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
 }
 
 .career-expanded-info {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid rgba(255,255,255,0.08);
   animation: fadeIn 0.3s ease;
 }
 
@@ -197,7 +228,7 @@
 .expanded-section h4 {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #f1f5f9;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -205,7 +236,7 @@
 
 .expanded-section p {
   font-size: 0.85rem;
-  color: #64748b;
+  color: #94a3b8;
   line-height: 1.5;
 }
 
@@ -217,8 +248,8 @@
 
 .branch-tag {
   padding: 0.25rem 0.75rem;
-  background: #eff6ff;
-  color: #2563eb;
+  background: rgba(59,130,246,0.15);
+  color: #93c5fd;
   border-radius: 1rem;
   font-size: 0.75rem;
   font-weight: 500;
@@ -235,7 +266,7 @@
 
 .job-roles-list li {
   font-size: 0.85rem;
-  color: #374151;
+  color: #94a3b8;
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -250,12 +281,12 @@
 }
 
 .selection-card {
-  background: white;
+  background: #1e293b;
   padding: 2rem;
   border-radius: 1rem;
   text-align: center;
   cursor: pointer;
-  border: 3px solid transparent;
+  border: 3px solid rgba(255,255,255,0.06);
   transition: all 0.3s ease;
   position: relative;
 }
@@ -267,7 +298,7 @@
 
 .selection-card.selected {
   border-color: var(--success-color);
-  background: #f0fdf4;
+  background: rgba(16,185,129,0.08);
 }
 
 .selection-icon {
@@ -277,12 +308,12 @@
 
 .selection-card h3 {
   font-size: 1.5rem;
-  color: var(--dark-color);
+  color: #f1f5f9;
   margin-bottom: 0.5rem;
 }
 
 .selection-card p {
-  color: var(--text-color);
+  color: #94a3b8;
 }
 
 .check-mark {
@@ -313,12 +344,12 @@
 }
 
 .location-card {
-  background: white;
+  background: #1e293b;
   padding: 3rem 2rem;
   border-radius: 1rem;
   text-align: center;
   cursor: pointer;
-  border: 3px solid transparent;
+  border: 3px solid rgba(255,255,255,0.06);
   transition: all 0.3s ease;
   position: relative;
 }
@@ -330,7 +361,7 @@
 
 .location-card.selected {
   border-color: var(--success-color);
-  background: #f0fdf4;
+  background: rgba(16,185,129,0.08);
 }
 
 .location-icon {
@@ -340,12 +371,12 @@
 
 .location-card h2 {
   font-size: 2rem;
-  color: var(--dark-color);
+  color: #f1f5f9;
   margin-bottom: 0.5rem;
 }
 
 .location-desc {
-  color: var(--text-color);
+  color: #94a3b8;
   margin-bottom: 1.5rem;
   font-size: 1.125rem;
 }
@@ -358,7 +389,7 @@
 
 .location-highlights li {
   padding: 0.5rem 0;
-  color: var(--text-color);
+  color: #94a3b8;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -389,23 +420,87 @@
     font-size: 2rem;
   }
 
+  .selection-header p {
+    font-size: 1rem;
+  }
+
   .career-selection-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .selection-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .location-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .selection-actions {
     flex-direction: column;
   }
 
+  .selection-actions .btn {
+    width: 100%;
+    min-height: 48px;
+  }
+
   .job-roles-list {
     grid-template-columns: 1fr;
+  }
+
+  .career-detail-card {
+    padding: 1.5rem;
+  }
+
+  .location-card {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .selection-page {
+    padding: 1.5rem 0 3rem;
+  }
+
+  .selection-header h1 {
+    font-size: 1.65rem;
+  }
+
+  .selection-header p {
+    font-size: 0.92rem;
+  }
+
+  .career-detail-card {
+    padding: 1.25rem;
+  }
+
+  .career-card-title h3 {
+    font-size: 1.05rem;
+  }
+
+  .career-card-actions {
+    flex-direction: column;
+  }
+
+  .career-expand-btn,
+  .career-continue-btn {
+    min-height: 44px;
+  }
+
+  .location-card {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .location-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .location-icon {
+    font-size: 3.5rem;
+  }
+
+  .location-desc {
+    font-size: 1rem;
   }
 }

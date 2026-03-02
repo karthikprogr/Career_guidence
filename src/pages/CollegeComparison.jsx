@@ -138,6 +138,17 @@ function CollegeComparison() {
                 {colleges.map((college) => (
                   <th key={college.id} className="college-col">
                     <div className="college-header">
+                      <div className="college-header-info">
+                        <div className="college-header-name">{college.name}</div>
+                        <div className="college-header-meta">
+                          {college.type && <span className="chm-type">{college.type}</span>}
+                          {(college.city || college.state) && (
+                            <span className="chm-loc">
+                              {[college.city, college.state].filter(Boolean).join(', ')}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                       <button
                         className="remove-btn"
                         onClick={() => removeCollege(college.id)}

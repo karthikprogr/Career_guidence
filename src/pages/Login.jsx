@@ -296,6 +296,32 @@ function Login() {
             Data Protected
           </div>
         </div>
+
+        {/* Demo Credentials */}
+        <div className="demo-credentials">
+          <div className="demo-cred-header">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            Demo Credentials
+          </div>
+          <div className="demo-cred-item">
+            <span className="demo-badge demo-admin">Admin</span>
+            <div className="demo-cred-info">
+              <code>seelamkarthik2006@gmail.com</code>
+              <code>admin@123</code>
+            </div>
+          </div>
+          <div className="demo-cred-item">
+            <span className="demo-badge demo-user">User</span>
+            <div className="demo-cred-info">
+              <code>seelamkarthik09@gmail.com</code>
+              <code>user@123</code>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Forgot Password Modal */}

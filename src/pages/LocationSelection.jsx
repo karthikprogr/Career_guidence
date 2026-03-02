@@ -41,7 +41,7 @@ function LocationSelection() {
       });
       
       logSuccess('STUDENT', 'Location preference updated', { location: selected });
-      navigate('/student-details');
+      navigate('/student-details', { state: { from: 'onboarding' } });
     } catch (error) {
       logError('STUDENT', 'Failed to update location preference', { error: error.message });
       alert('Failed to save. Please try again.');

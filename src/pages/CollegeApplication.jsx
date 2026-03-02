@@ -184,7 +184,7 @@ function CollegeApplication() {
           <div className="college-details">
             <p><strong>Location:</strong> {college.location}</p>
             <p><strong>Type:</strong> {college.type}</p>
-            <p><strong>Fees:</strong> ₹{college.fees?.toLocaleString()}/year</p>
+            <p><strong>Fees:</strong> {(() => { const s={INR:'₹',USD:'$',GBP:'£',EUR:'€',AUD:'A$',CAD:'C$',SGD:'S$',CHF:'CHF ',SEK:'kr '}; const sym=college.currency||'INR'; return `${s[sym]||(sym+' ')}${college.fees?.toLocaleString()}` })()}/year</p>
             <p><strong>Ranking:</strong> #{college.ranking}</p>
             <p><strong>Min CGPA Required:</strong> {college.minCGPA}</p>
             <p><strong>Placement Rate:</strong> {college.placementRate}%</p>

@@ -1,7 +1,7 @@
 .college-details-page {
   min-height: calc(100vh - 80px);
   padding: 2rem 0;
-  background-color: var(--light-color);
+  background: #0f172a;
 }
 
 .back-btn {
@@ -9,9 +9,9 @@
 }
 
 .college-details-card {
-  background: white;
+  background: #1e293b;
   border-radius: 1rem;
-  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255,255,255,0.07);
   overflow: hidden;
 }
 
@@ -96,7 +96,7 @@
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
   padding: 2rem 2.5rem;
-  background: var(--light-color);
+  background: rgba(255,255,255,0.02);
 }
 
 .info-card {
@@ -104,8 +104,9 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: white;
+  background: #243048;
   border-radius: 0.5rem;
+  border: 1px solid rgba(255,255,255,0.06);
 }
 
 .info-icon {
@@ -114,19 +115,19 @@
 
 .info-label {
   font-size: 0.875rem;
-  color: var(--text-color);
+  color: #94a3b8;
   margin-bottom: 0.25rem;
 }
 
 .info-value {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--dark-color);
+  color: #f1f5f9;
 }
 
 .college-section {
   padding: 2rem 2.5rem;
-  border-bottom: 1px solid var(--light-color);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
 .college-section:last-child {
@@ -135,18 +136,18 @@
 
 .college-section h2 {
   font-size: 1.5rem;
-  color: var(--dark-color);
+  color: #f1f5f9;
   margin-bottom: 1rem;
 }
 
 .college-section p {
-  color: var(--text-color);
+  color: #94a3b8;
   line-height: 1.8;
 }
 
 .registration-section ol {
   padding-left: 1.5rem;
-  color: var(--text-color);
+  color: #94a3b8;
   line-height: 2;
 }
 
@@ -166,7 +167,7 @@
 }
 
 .contact-info a {
-  color: var(--primary-color);
+  color: #93c5fd;
   text-decoration: none;
 }
 
@@ -190,30 +191,91 @@
     gap: 1.5rem;
     padding: 2rem 1.5rem;
   }
-  
+
   .college-header h1 {
     font-size: 1.75rem;
   }
-  
+
   .college-location,
   .college-type {
     font-size: 1rem;
   }
-  
+
   .college-rank {
-    align-self: flex-end;
+    align-self: flex-start;
   }
-  
+
   .quick-info-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     padding: 1.5rem;
+    gap: 1rem;
   }
-  
+
   .college-section {
     padding: 1.5rem;
   }
-  
+
   .action-section {
     padding: 1.5rem;
+  }
+
+  .eligibility-banner {
+    padding: 1.25rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .college-details-page {
+    padding: 1.25rem 0;
+  }
+
+  .college-header {
+    padding: 1.5rem 1.25rem;
+    gap: 1rem;
+  }
+
+  .college-header h1 {
+    font-size: 1.45rem;
+  }
+
+  .college-location,
+  .college-type {
+    font-size: 0.92rem;
+  }
+
+  .college-rank strong {
+    font-size: 1.6rem;
+  }
+
+  .college-rank span {
+    font-size: 0.8rem;
+  }
+
+  .quick-info-grid {
+    grid-template-columns: 1fr;
+    padding: 1.25rem;
+  }
+
+  .info-value {
+    font-size: 1.1rem;
+  }
+
+  .college-section {
+    padding: 1.25rem;
+  }
+
+  .college-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .action-section {
+    padding: 1.25rem;
+  }
+
+  .btn-large {
+    width: 100%;
+    min-height: 48px;
+    font-size: 1rem;
   }
 }

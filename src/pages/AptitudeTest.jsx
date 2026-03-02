@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, getDocs, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { Target, ClipboardList, Pin, CheckCircle, Clock, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
+import { collection, getDocs, getDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { logInfo, logSuccess } from '../logger';
 import './AptitudeTest.css';
@@ -13,6 +14,26 @@ function AptitudeTest() {
   const [loading, setLoading] = useState(true);
   const [testStarted, setTestStarted] = useState(false);
   const navigate = useNavigate();
+
+  const [studentCareer, setStudentCareer] = useState(null);
+
+  const CAREER_NAMES = {
+    engineering: 'Engineering',
+    management: 'Management',
+    medical: 'Medical',
+    law: 'Law',
+    science: 'Science',
+    arts: 'Arts & Humanities'
+  };
+
+  const shuffleArray = (arr) => {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
 
   useEffect(() => {
     fetchQuestions();
@@ -29,21 +50,47 @@ function AptitudeTest() {
 
   const fetchQuestions = async () => {
     try {
+      // Fetch student's selected career domain
+      let career = null;
+      if (auth.currentUser) {
+        const studentDoc = await getDoc(doc(db, 'students', auth.currentUser.uid));
+        career = studentDoc.data()?.preferences?.career || null;
+        setStudentCareer(career);
+      }
+
       const querySnapshot = await getDocs(collection(db, 'questions'));
-      const questionsData = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
+      const questionsData = querySnapshot.docs.map(d => ({
+        id: d.id,
+        ...d.data()
       }));
-      
-      // Shuffle and limit to 30 questions (10 from each category)
-      const verbal = questionsData.filter(q => q.category === 'verbal').slice(0, 10);
-      const quantitative = questionsData.filter(q => q.category === 'quantitative').slice(0, 10);
-      const general = questionsData.filter(q => q.category === 'general').slice(0, 10);
-      
-      const allQuestions = [...verbal, ...quantitative, ...general];
+
+      // Core aptitude sections (shuffled for variety)
+      const verbal = shuffleArray(questionsData.filter(q => q.category === 'verbal')).slice(0, 10);
+      const quantitative = shuffleArray(questionsData.filter(q => q.category === 'quantitative')).slice(0, 10);
+
+      // Domain-specific section: prefer career questions, fall back to general
+      let domainSection;
+      if (career) {
+        const domainQs = shuffleArray(questionsData.filter(q => q.category === career));
+        if (domainQs.length >= 5) {
+          // Enough domain questions — use them
+          domainSection = domainQs.slice(0, 10);
+        } else {
+          // Mix domain + general to fill 10
+          const generalQs = shuffleArray(questionsData.filter(q => q.category === 'general'));
+          domainSection = [...domainQs, ...generalQs].slice(0, 10);
+        }
+      } else {
+        domainSection = shuffleArray(questionsData.filter(q => q.category === 'general')).slice(0, 10);
+      }
+
+      const allQuestions = [...verbal, ...quantitative, ...domainSection];
       setQuestions(allQuestions);
-      
-      logInfo('APTITUDE_TEST', 'Questions loaded', { count: allQuestions.length });
+
+      logInfo('APTITUDE_TEST', 'Questions loaded', {
+        count: allQuestions.length,
+        career: career || 'general'
+      });
     } catch (error) {
       console.error('Error fetching questions:', error);
       alert('Failed to load questions. Please try again.');
@@ -149,19 +196,35 @@ function AptitudeTest() {
         <div className="container">
           <div className="test-instructions">
             <h1>Aptitude Test Instructions</h1>
-            
+
+            {studentCareer && (
+              <div className="career-banner">
+                <div className="career-banner-left">
+                  <Target size={26} className="career-banner-icon" />
+                  <div>
+                    <strong>Personalized for {CAREER_NAMES[studentCareer] || studentCareer}</strong>
+                    <p>This test includes domain-specific questions tailored to your selected career path.</p>
+                  </div>
+                </div>
+                <button className="btn-change-career" onClick={() => navigate('/career-selection')}>
+                  <RefreshCw size={13} />
+                  Change Career Path
+                </button>
+              </div>
+            )}
+
             <div className="instructions-card">
-              <h2>📝 Test Details</h2>
+              <h2><ClipboardList size={20} className="card-icon" /> Test Details</h2>
               <ul>
                 <li>Total Questions: <strong>{questions.length}</strong></li>
                 <li>Time Limit: <strong>30 minutes</strong></li>
-                <li>Sections: Verbal, Quantitative, General Knowledge</li>
+                <li>Sections: Verbal, Quantitative, {studentCareer ? <strong>{CAREER_NAMES[studentCareer] || studentCareer}</strong> : 'General Knowledge'}</li>
                 <li>Each question carries equal marks</li>
               </ul>
             </div>
 
             <div className="instructions-card">
-              <h2>📌 Important Instructions</h2>
+              <h2><Pin size={20} className="card-icon" /> Important Instructions</h2>
               <ol>
                 <li>Read each question carefully before answering</li>
                 <li>You can navigate between questions using Previous/Next buttons</li>
@@ -173,7 +236,7 @@ function AptitudeTest() {
             </div>
 
             <div className="instructions-card">
-              <h2>✓ Ready to Begin?</h2>
+              <h2><CheckCircle size={20} className="card-icon" /> Ready to Begin?</h2>
               <p>Make sure you are in a quiet environment and have 30 minutes available.</p>
               <button className="btn btn-primary btn-large" onClick={handleStartTest}>
                 Start Test
@@ -200,7 +263,8 @@ function AptitudeTest() {
             </div>
           </div>
           <div className={`test-timer ${timeLeft < 300 ? 'timer-warning' : ''}`}>
-            ⏱ {formatTime(timeLeft)}
+            <Clock size={16} style={{ verticalAlign: 'middle', marginRight: '0.3rem' }} />
+            {formatTime(timeLeft)}
           </div>
         </div>
 
@@ -208,7 +272,7 @@ function AptitudeTest() {
         <div className="question-card">
           <div className="question-meta">
             <span className={`category-badge badge-${currentQ.category}`}>
-              {currentQ.category}
+              {CAREER_NAMES[currentQ.category] || currentQ.category}
             </span>
             <span className={`difficulty-badge badge-${currentQ.difficulty}`}>
               {currentQ.difficulty}
@@ -240,7 +304,7 @@ function AptitudeTest() {
             onClick={handlePrevious}
             disabled={currentQuestion === 0}
           >
-            ← Previous
+            <ChevronLeft size={18} style={{ verticalAlign: 'middle' }} /> Previous
           </button>
 
           <div className="question-indicators">
@@ -259,7 +323,7 @@ function AptitudeTest() {
 
           {currentQuestion < questions.length - 1 ? (
             <button className="btn btn-primary" onClick={handleNext}>
-              Next →
+              Next <ChevronRight size={18} style={{ verticalAlign: 'middle' }} />
             </button>
           ) : (
             <button className="btn btn-success" onClick={handleSubmit}>

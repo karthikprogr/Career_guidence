@@ -1,7 +1,7 @@
 .aptitude-test-page {
   min-height: calc(100vh - 80px);
   padding: 2rem 0;
-  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #1e40af 100%);
+  background: #0f172a;
 }
 
 .test-instructions {
@@ -17,40 +17,111 @@
 }
 
 .instructions-card {
-  background: white;
+  background: #1e293b;
   padding: 2rem;
   border-radius: 1rem;
-  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255,255,255,0.07);
   margin-bottom: 1.5rem;
 }
 
 .instructions-card h2 {
-  color: var(--dark-color);
+  color: #f1f5f9;
   margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-icon {
+  color: #93c5fd;
+  flex-shrink: 0;
 }
 
 .instructions-card ul,
 .instructions-card ol {
-  color: var(--text-color);
+  color: #94a3b8;
   line-height: 2;
   padding-left: 1.5rem;
 }
 
 .instructions-card ul li strong {
-  color: var(--primary-color);
+  color: #93c5fd;
 }
 
 .instructions-card p {
-  color: var(--text-color);
+  color: #94a3b8;
   margin-bottom: 1.5rem;
   font-size: 1.125rem;
 }
 
+/* Career domain banner on instructions page */
+.career-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.15));
+  border: 1px solid rgba(139,92,246,0.4);
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.career-banner-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.career-banner-icon {
+  color: #c4b5fd;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.career-banner strong {
+  display: block;
+  color: #c4b5fd;
+  font-size: 1.05rem;
+  margin-bottom: 0.25rem;
+}
+
+.career-banner p {
+  color: #94a3b8;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.btn-change-career {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(139,92,246,0.2);
+  border: 1px solid rgba(139,92,246,0.5);
+  color: #c4b5fd;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-change-career:hover {
+  background: rgba(139,92,246,0.35);
+  border-color: rgba(139,92,246,0.8);
+}
+
 .test-header {
-  background: white;
+  background: #1e293b;
   padding: 1.5rem;
   border-radius: 1rem;
-  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255,255,255,0.07);
   margin-bottom: 1.5rem;
   display: flex;
   justify-content: space-between;
@@ -63,7 +134,7 @@
 
 .test-progress span {
   display: block;
-  color: var(--text-color);
+  color: #94a3b8;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
@@ -71,7 +142,7 @@
 .progress-bar {
   width: 100%;
   height: 8px;
-  background: var(--light-color);
+  background: rgba(255,255,255,0.08);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -85,9 +156,9 @@
 .test-timer {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--primary-color);
+  color: #93c5fd;
   padding: 0.5rem 1.5rem;
-  background: var(--light-color);
+  background: rgba(255,255,255,0.08);
   border-radius: 0.5rem;
   margin-left: 2rem;
 }
@@ -103,10 +174,10 @@
 }
 
 .question-card {
-  background: white;
+  background: #1e293b;
   padding: 2.5rem;
   border-radius: 1rem;
-  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255,255,255,0.07);
   margin-bottom: 1.5rem;
 }
 
@@ -155,9 +226,40 @@
   color: #991b1b;
 }
 
+/* Career-specific category badges */
+.badge-engineering {
+  background: rgba(99,102,241,0.2);
+  color: #a5b4fc;
+}
+
+.badge-management {
+  background: rgba(245,158,11,0.2);
+  color: #fcd34d;
+}
+
+.badge-medical {
+  background: rgba(16,185,129,0.2);
+  color: #6ee7b7;
+}
+
+.badge-law {
+  background: rgba(239,68,68,0.2);
+  color: #fca5a5;
+}
+
+.badge-science {
+  background: rgba(6,182,212,0.2);
+  color: #67e8f9;
+}
+
+.badge-arts {
+  background: rgba(236,72,153,0.2);
+  color: #f9a8d4;
+}
+
 .question-text {
   font-size: 1.5rem;
-  color: var(--dark-color);
+  color: #f1f5f9;
   margin-bottom: 2rem;
   line-height: 1.6;
 }
@@ -173,28 +275,28 @@
   align-items: center;
   gap: 1rem;
   padding: 1.25rem;
-  background: var(--light-color);
-  border: 2px solid var(--border-color);
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.1);
   border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .option:hover {
-  background: #e0e7ff;
-  border-color: var(--primary-color);
+  background: rgba(99,102,241,0.15);
+  border-color: #6366f1;
 }
 
 .option.selected {
-  background: #dbeafe;
-  border-color: var(--primary-color);
+  background: rgba(59,130,246,0.2);
+  border-color: #3b82f6;
   font-weight: 600;
 }
 
 .option-radio {
   width: 24px;
   height: 24px;
-  border: 2px solid var(--border-color);
+  border: 2px solid rgba(255,255,255,0.2);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -215,14 +317,18 @@
 
 .option-text {
   flex: 1;
-  color: var(--text-color);
+  color: #94a3b8;
+}
+
+.option.selected .option-text {
+  color: #f1f5f9;
 }
 
 .test-navigation {
-  background: white;
+  background: #1e293b;
   padding: 1.5rem;
   border-radius: 1rem;
-  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255,255,255,0.07);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -240,18 +346,18 @@
 .question-indicator {
   width: 40px;
   height: 40px;
-  border: 2px solid var(--border-color);
-  background: white;
+  border: 2px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
   border-radius: 0.375rem;
   cursor: pointer;
   font-weight: 600;
-  color: var(--text-color);
+  color: #94a3b8;
   transition: all 0.3s ease;
 }
 
 .question-indicator:hover {
-  border-color: var(--primary-color);
-  color: var(--primary-color);
+  border-color: #3b82f6;
+  color: #93c5fd;
 }
 
 .question-indicator.current {
@@ -275,31 +381,99 @@
   .test-header {
     flex-direction: column;
     gap: 1rem;
+    padding: 1.25rem;
   }
-  
+
   .test-timer {
     margin-left: 0;
     width: 100%;
     text-align: center;
+    font-size: 1.35rem;
   }
-  
+
   .question-card {
     padding: 1.5rem;
   }
-  
+
   .question-text {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
   }
-  
+
   .test-navigation {
     flex-direction: column;
+    padding: 1.25rem;
+    gap: 1rem;
   }
-  
+
   .test-navigation .btn {
     width: 100%;
+    min-height: 48px;
   }
-  
+
   .question-indicators {
     order: -1;
+  }
+
+  .question-indicator {
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
+
+  .test-instructions h1 {
+    font-size: 2rem;
+  }
+
+  .instructions-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .aptitude-test-page {
+    padding: 1.25rem 0;
+  }
+
+  .test-instructions h1 {
+    font-size: 1.6rem;
+  }
+
+  .instructions-card {
+    padding: 1.25rem;
+  }
+
+  .test-header {
+    padding: 1rem;
+  }
+
+  .question-card {
+    padding: 1.25rem;
+  }
+
+  .question-text {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .option {
+    padding: 1rem;
+  }
+
+  .option-text {
+    font-size: 0.9rem;
+  }
+
+  .question-meta {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .test-timer {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .test-navigation {
+    padding: 1rem;
   }
 }

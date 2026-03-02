@@ -13,6 +13,8 @@ function CollegeList() {
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedForComparison, setSelectedForComparison] = useState([]);
+  const [availableLocations, setAvailableLocations] = useState([]);
+  const [availableTypes, setAvailableTypes] = useState([]);
   const [filters, setFilters] = useState({
     location: 'all',
     minFees: '',
@@ -45,9 +47,22 @@ function CollegeList() {
       }));
       
       console.log('Colleges fetched from database:', collegesData.length);
-      console.table(collegesData.slice(0, 5)); // Show first 5 for debugging
-      
       setColleges(collegesData);
+
+      // Build dynamic filter options from real data
+      const locSet = new Set();
+      const typeSet = new Set();
+      collegesData.forEach(c => {
+        if (c.city)    locSet.add(c.city.trim());
+        if (c.state)   locSet.add(c.state.trim());
+        if (c.country) locSet.add(c.country.trim());
+        // support both legacy `type` string and new `types` array
+        if (c.type) typeSet.add(c.type.trim());
+        if (Array.isArray(c.types)) c.types.forEach(t => t && typeSet.add(t.trim()));
+      });
+      setAvailableLocations([...locSet].sort());
+      setAvailableTypes([...typeSet].sort());
+
       logInfo('STUDENT', 'Colleges fetched', { count: collegesData.length });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -66,18 +81,26 @@ function CollegeList() {
       return;
     }
 
-    // Filter by location preference (only if explicitly selected)
+    // Filter by location — check city, state, country, and combined location field
     if (filters.location !== 'all') {
-      filtered = filtered.filter(college => 
-        college.location?.toLowerCase().includes(filters.location.toLowerCase())
-      );
+      const loc = filters.location.toLowerCase();
+      filtered = filtered.filter(college => {
+        const city     = (college.city     || '').toLowerCase();
+        const state    = (college.state    || '').toLowerCase();
+        const country  = (college.country  || '').toLowerCase();
+        const combined = (college.location || '').toLowerCase();
+        return city === loc || state === loc || country === loc || combined.includes(loc);
+      });
     }
 
-    // Filter by type
+    // Filter by type (check both legacy `type` string and new `types` array)
     if (filters.type !== 'all') {
-      filtered = filtered.filter(college => 
-        college.type.toLowerCase().includes(filters.type.toLowerCase())
-      );
+      const typ = filters.type.toLowerCase();
+      filtered = filtered.filter(college => {
+        const singleType = (college.type || '').toLowerCase();
+        const multiTypes = (college.types || []).map(t => t.toLowerCase());
+        return singleType === typ || multiTypes.includes(typ);
+      });
     }
 
     // Filter by fees range
@@ -196,15 +219,9 @@ function CollegeList() {
                 onChange={handleFilterChange}
               >
                 <option value="all">All Locations</option>
-                <option value="Mumbai">Mumbai</option>
-                <option value="Delhi">Delhi</option>
-                <option value="Bangalore">Bangalore</option>
-                <option value="Chennai">Chennai</option>
-                <option value="Kolkata">Kolkata</option>
-                <option value="Hyderabad">Hyderabad</option>
-                <option value="Pune">Pune</option>
-                <option value="Ahmedabad">Ahmedabad</option>
-                <option value="Jaipur">Jaipur</option>
+                {availableLocations.map(loc => (
+                  <option key={loc} value={loc}>{loc}</option>
+                ))}
               </select>
             </div>
 
@@ -217,20 +234,14 @@ function CollegeList() {
                 onChange={handleFilterChange}
               >
                 <option value="all">All Types</option>
-                <option value="engineering">Engineering</option>
-                <option value="management">Management</option>
-                <option value="medical">Medical</option>
-                <option value="law">Law</option>
-                <option value="science">Science</option>
-                <option value="arts">Arts</option>
-                <option value="commerce">Commerce</option>
-                <option value="design">Design</option>
-                <option value="media">Media</option>
+                {availableTypes.map(t => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
               </select>
             </div>
 
             <div className="form-group">
-              <label className="form-label">Min Fees (₹)</label>
+              <label className="form-label">Min Fees</label>
               <input
                 type="number"
                 className="form-input"
@@ -242,7 +253,7 @@ function CollegeList() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Max Fees (₹)</label>
+              <label className="form-label">Max Fees</label>
               <input
                 type="number"
                 className="form-input"

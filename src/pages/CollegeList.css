@@ -1,7 +1,7 @@
 .college-list-page {
   min-height: calc(100vh - 80px);
   padding: 2rem 0;
-  background-color: var(--light-color);
+  background: #0f172a;
 }
 
 .page-header {
@@ -11,31 +11,31 @@
 
 .page-header h1 {
   font-size: 2.5rem;
-  color: var(--dark-color);
+  color: #f1f5f9;
   margin-bottom: 0.5rem;
 }
 
 .page-header p {
   font-size: 1.125rem;
-  color: var(--text-color);
+  color: #94a3b8;
 }
 
 .eligibility-info {
-  background: white;
+  background: #1e293b;
   padding: 1.5rem;
   border-radius: 0.5rem;
-  box-shadow: var(--shadow);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   margin-bottom: 2rem;
   border-left: 4px solid var(--primary-color);
 }
 
 .eligibility-info h3 {
-  color: var(--dark-color);
+  color: #f1f5f9;
   margin-bottom: 1rem;
 }
 
 .eligibility-info p {
-  color: var(--text-color);
+  color: #94a3b8;
   margin: 0.5rem 0;
 }
 
@@ -44,15 +44,15 @@
 }
 
 .filters-section {
-  background: white;
+  background: #1e293b;
   padding: 1.5rem;
   border-radius: 0.5rem;
-  box-shadow: var(--shadow);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   margin-bottom: 2rem;
 }
 
 .filters-section h3 {
-  color: var(--dark-color);
+  color: #f1f5f9;
   margin-bottom: 1rem;
 }
 
@@ -75,20 +75,28 @@
 .no-results {
   text-align: center;
   padding: 4rem 2rem;
-  background: white;
+  background: #1e293b;
   border-radius: 0.5rem;
-  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.07);
 }
 
 .no-results h3 {
   font-size: 1.5rem;
-  color: var(--dark-color);
+  color: #f1f5f9;
   margin-bottom: 1rem;
 }
 
 .no-results p {
-  color: var(--text-color);
+  color: #94a3b8;
   font-size: 1.125rem;
+}
+
+.college-list-page .form-label { color: #94a3b8; }
+.college-list-page .form-input,
+.college-list-page .form-select {
+  background: #0f172a;
+  border-color: rgba(255,255,255,0.12);
+  color: #f1f5f9;
 }
 
 .comparison-toolbar {
@@ -141,11 +149,11 @@
   .page-header h1 {
     font-size: 2rem;
   }
-  
+
   .filters-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .colleges-grid {
     grid-template-columns: 1fr;
   }
@@ -162,6 +170,43 @@
 
   .toolbar-actions .btn {
     width: 100%;
+    min-height: 44px;
+  }
+
+  .filters-section,
+  .eligibility-info {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header h1 {
+    font-size: 1.65rem;
+  }
+
+  .page-header p {
+    font-size: 0.95rem;
+  }
+
+  .college-list-page {
+    padding: 1.5rem 0;
+  }
+
+  .comparison-toolbar {
+    border-radius: 10px 10px 0 0;
+    padding: 0.85rem 1rem;
+  }
+
+  .selection-count {
+    font-size: 1rem;
+  }
+
+  .no-results {
+    padding: 3rem 1.5rem;
+  }
+
+  .no-results h3 {
+    font-size: 1.25rem;
   }
 }
 

@@ -105,8 +105,9 @@ function CareerSelection() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async () => {
-    if (!selected) {
+  const handleSubmit = async (careerOverride) => {
+    const careerToSave = careerOverride || selected;
+    if (!careerToSave) {
       alert('Please select a career option');
       return;
     }
@@ -114,10 +115,10 @@ function CareerSelection() {
     setLoading(true);
     try {
       await updateDoc(doc(db, 'students', auth.currentUser.uid), {
-        'preferences.career': selected
+        'preferences.career': careerToSave
       });
       
-      logSuccess('STUDENT', 'Career preference updated', { career: selected });
+      logSuccess('STUDENT', 'Career preference updated', { career: careerToSave });
       navigate('/location-selection');
     } catch (error) {
       logError('STUDENT', 'Failed to update career preference', { error: error.message });
@@ -175,21 +176,38 @@ function CareerSelection() {
                 </div>
               </div>
 
-              <button 
-                className="career-expand-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleExpand(career.id);
-                }}
-              >
-                {expandedCard === career.id ? 'Show Less' : 'View Details'}
-                <svg 
-                  width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                  style={{ transform: expandedCard === career.id ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.3s' }}
+              <div className="career-card-actions">
+                <button 
+                  className="career-expand-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleExpand(career.id);
+                  }}
                 >
-                  <polyline points="6 9 12 15 18 9"/>
-                </svg>
-              </button>
+                  {expandedCard === career.id ? 'Show Less' : 'View Details'}
+                  <svg 
+                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                    style={{ transform: expandedCard === career.id ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.3s' }}
+                  >
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+                <button
+                  className={`career-continue-btn ${selected === career.id ? 'active' : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelected(career.id);
+                    handleSubmit(career.id);
+                  }}
+                  disabled={loading}
+                >
+                  {loading && selected === career.id ? 'Saving...' : 'Continue'}
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                </button>
+              </div>
 
               {expandedCard === career.id && (
                 <div className="career-expanded-info">
@@ -229,17 +247,6 @@ function CareerSelection() {
             onClick={() => navigate('/student')}
           >
             Back to Dashboard
-          </button>
-          <button 
-            className="btn btn-primary"
-            onClick={handleSubmit}
-            disabled={!selected || loading}
-          >
-            {loading ? 'Saving...' : 'Continue to Location'}
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="5" y1="12" x2="19" y2="12"/>
-              <polyline points="12 5 19 12 12 19"/>
-            </svg>
           </button>
         </div>
       </div>

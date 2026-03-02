@@ -52,160 +52,278 @@ function StudentDashboard() {
   const completedSteps = steps.filter(Boolean).length;
   const progressPercent = (completedSteps / steps.length) * 100;
 
+  const stepClass = (done, active) => done ? 'tl-done' : active ? 'tl-active' : 'tl-pending';
+
   return (
     <div className="student-dashboard">
-      <div className="container">
-        {/* Welcome Section */}
-        <div className="welcome-section">
-          <h1>Welcome, {studentData?.name || 'Student'}!</h1>
-          <p>Your journey to the perfect career and college starts here</p>
-        </div>
 
-        {/* Progress Tracker */}
-        <div className="progress-tracker-card">
-          <div className="progress-header">
-            <h2>Your Progress</h2>
-            <span className="progress-badge">{completedSteps} of {steps.length} steps completed</span>
+      {/* ── HERO BANNER ── */}
+      <div className="dashboard-hero">
+        <div className="hero-inner">
+          <div className="hero-greeting">
+            <p className="eyebrow">Student Dashboard</p>
+            <h1>Hello, <span>{studentData?.name || 'Student'}</span> 👋</h1>
+            <p className="subtitle">Your career & college journey — track every step.</p>
           </div>
-          <div className="progress-bar-container">
-            <div className="progress-bar-fill" style={{ width: `${progressPercent}%` }}></div>
-          </div>
-
-          <div className="journey-steps">
-            {/* Step 1: Complete Profile */}
-            <div className={`journey-step ${profileComplete ? 'completed' : completedSteps === 0 ? 'current' : 'pending'}`}>
-              <div className="step-indicator">
-                {profileComplete ? <CheckIcon size={18} color="#ffffff" /> : <span>1</span>}
-              </div>
-              <div className="step-content">
-                <h4>Complete Your Profile</h4>
-                <p>Add your CGPA, exam scores, and personal details</p>
-                {!profileComplete && (
-                  <button className="btn btn-primary btn-sm" onClick={() => navigate('/student-details')}>
-                    Complete Now
-                  </button>
-                )}
-              </div>
+          <div className="hero-stats">
+            <div className="hero-stat">
+              <span className="stat-val">{completedSteps}/{steps.length}</span>
+              <span className="stat-lbl">Steps Done</span>
             </div>
-
-            {/* Step 2: Choose Career */}
-            <div className={`journey-step ${hasCareer ? 'completed' : profileComplete && !hasCareer ? 'current' : 'pending'}`}>
-              <div className="step-indicator">
-                {hasCareer ? <CheckIcon size={18} color="#ffffff" /> : <span>2</span>}
-              </div>
-              <div className="step-content">
-                <h4>Choose Your Career Path</h4>
-                <p>{hasCareer ? `Selected: ${studentData.preferences.career}` : 'Explore 6 career fields and pick one'}</p>
-                <button 
-                  className={`btn ${hasCareer ? 'btn-outline' : 'btn-primary'} btn-sm`}
-                  onClick={() => navigate('/career-selection')}
-                >
-                  {hasCareer ? 'Change Career' : 'Select Career'}
-                </button>
-              </div>
+            <div className="hero-stat">
+              <span className="stat-val">{studentData?.cgpa || '—'}</span>
+              <span className="stat-lbl">CGPA</span>
             </div>
-
-            {/* Step 3: Pick Location */}
-            <div className={`journey-step ${hasLocation ? 'completed' : hasCareer && !hasLocation ? 'current' : 'pending'}`}>
-              <div className="step-indicator">
-                {hasLocation ? <CheckIcon size={18} color="#ffffff" /> : <span>3</span>}
-              </div>
-              <div className="step-content">
-                <h4>Pick Study Location</h4>
-                <p>{hasLocation ? `Selected: ${studentData.preferences.location}` : 'Choose India or Abroad'}</p>
-                <button 
-                  className={`btn ${hasLocation ? 'btn-outline' : 'btn-primary'} btn-sm`}
-                  onClick={() => navigate('/location-selection')}
-                >
-                  {hasLocation ? 'Change Location' : 'Select Location'}
-                </button>
-              </div>
-            </div>
-
-            {/* Step 4: Take Test */}
-            <div className={`journey-step ${hasAppearedForTest ? 'completed' : hasLocation && !hasAppearedForTest ? 'current' : 'pending'}`}>
-              <div className="step-indicator">
-                {hasAppearedForTest ? <CheckIcon size={18} color="#ffffff" /> : <span>4</span>}
-              </div>
-              <div className="step-content">
-                <h4>Take Aptitude Test</h4>
-                <p>{hasAppearedForTest ? `Score: ${Math.round(studentData.aptitudeScore)}%` : '30-minute test to assess your strengths'}</p>
-                {hasAppearedForTest ? (
-                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                    <button className="btn btn-outline btn-sm" onClick={() => navigate('/test-completion')}>
-                      View Result
-                    </button>
-                    <button className="btn btn-primary btn-sm" onClick={() => navigate('/aptitude-test')}>
-                      Retake Test
-                    </button>
-                  </div>
-                ) : (
-                  <button 
-                    className="btn btn-primary btn-sm"
-                    onClick={() => navigate('/aptitude-test')}
-                    disabled={!profileComplete}
-                  >
-                    {profileComplete ? 'Start Test' : 'Complete Profile First'}
-                  </button>
-                )}
-              </div>
+            <div className="hero-stat">
+              <span className="stat-val">{hasAppearedForTest ? `${Math.round(studentData.aptitudeScore)}%` : '—'}</span>
+              <span className="stat-lbl">Aptitude</span>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Cards Grid */}
+      {/* ── FLOATING BODY ── */}
+      <div className="dashboard-body">
+
+        {/* ── STATS CARDS ── */}
         <div className="dashboard-grid">
-          {/* Profile Status */}
-          <div className="dashboard-card">
-            <div className="card-icon"><UsersIcon size={28} /></div>
-            <h3>Profile Status</h3>
-            <p className={profileComplete ? 'status-complete' : 'status-incomplete'}>
-              {profileComplete ? 'Complete' : 'Incomplete'}
-            </p>
-            <button 
-              className={`btn ${profileComplete ? 'btn-outline' : 'btn-primary'} btn-sm`}
-              onClick={() => navigate('/student-details')}
-            >
-              {profileComplete ? 'Update Profile' : 'Complete Profile'}
+
+          {/* Profile */}
+          <div className="dash-card accent-blue">
+            <div className="card-top">
+              <div className="card-icon-box icon-blue"><UsersIcon size={18} /></div>
+              <span className={`card-status-dot ${profileComplete ? 'dot-green' : 'dot-amber'}`}></span>
+            </div>
+            <h3>Profile</h3>
+            <div className={`card-value ${profileComplete ? 'text-green' : 'text-amber'}`}>
+              {profileComplete ? 'Complete' : 'Pending'}
+            </div>
+            <p className="card-sub">{profileComplete ? 'All details filled in' : 'Add CGPA & personal info'}</p>
+            <button className={`dash-btn ${profileComplete ? 'dash-btn-outline' : 'dash-btn-primary'} dash-btn-sm`}
+              onClick={() => navigate('/student-details')}>
+              {profileComplete ? 'Update' : 'Complete Now'}
             </button>
           </div>
 
-          {/* Academic Score */}
-          <div className="dashboard-card">
-            <div className="card-icon"><ChartIcon size={28} /></div>
-            <h3>Academic Score</h3>
-            <p className="score-display">{studentData?.cgpa ? `CGPA: ${studentData.cgpa}` : 'Not Added'}</p>
-            {studentData?.aptitudeScore > 0 && (
-              <p className="score-display aptitude-score">Aptitude: {Math.round(studentData.aptitudeScore)}%</p>
-            )}
+          {/* Academic */}
+          <div className="dash-card accent-purple">
+            <div className="card-top">
+              <div className="card-icon-box icon-purple"><ChartIcon size={18} /></div>
+              <span className={`card-status-dot ${studentData?.cgpa ? 'dot-purple' : 'dot-amber'}`}></span>
+            </div>
+            <h3>Academics</h3>
+            <div className="scores-row">
+              <div className="score-chip">
+                <span className="sc-val">{studentData?.cgpa || '—'}</span>
+                <span className="sc-lbl">CGPA</span>
+              </div>
+              <div className="score-chip">
+                <span className="sc-val">{hasAppearedForTest ? `${Math.round(studentData.aptitudeScore)}%` : '—'}</span>
+                <span className="sc-lbl">Aptitude</span>
+              </div>
+            </div>
           </div>
 
-          {/* Find Colleges */}
-          <div className="dashboard-card highlight-card">
-            <div className="card-icon"><BuildingIcon size={28} /></div>
+          {/* Colleges */}
+          <div className="dash-card accent-green">
+            <div className="card-top">
+              <div className="card-icon-box icon-green"><BuildingIcon size={18} /></div>
+              <span className="card-status-dot dot-green"></span>
+            </div>
             <h3>Find Colleges</h3>
-            <p>Browse colleges matching your profile and preferences</p>
-            <button 
-              className="btn btn-primary btn-sm"
-              onClick={() => navigate('/college-list')}
-            >
-              View Colleges
+            <div className="card-value text-green">Browse</div>
+            <p className="card-sub">Colleges matched to your profile &amp; career</p>
+            <button className="dash-btn dash-btn-green dash-btn-sm" onClick={() => navigate('/college-list')}>
+              View Colleges →
             </button>
           </div>
 
-          {/* My Applications */}
-          <div className="dashboard-card">
-            <div className="card-icon"><DocumentIcon size={28} /></div>
-            <h3>My Applications</h3>
-            <p>Track your college application status</p>
-            <button 
-              className="btn btn-outline btn-sm"
-              onClick={() => navigate('/applications')}
-            >
+          {/* Applications */}
+          <div className="dash-card accent-amber">
+            <div className="card-top">
+              <div className="card-icon-box icon-amber"><DocumentIcon size={18} /></div>
+              <span className="card-status-dot dot-amber"></span>
+            </div>
+            <h3>Applications</h3>
+            <div className="card-value text-amber">Track</div>
+            <p className="card-sub">Monitor your college application status</p>
+            <button className="dash-btn dash-btn-outline dash-btn-sm" onClick={() => navigate('/applications')}>
               View Applications
             </button>
           </div>
         </div>
+
+        {/* ── PROGRESS TRACKER ── */}
+        <div className="progress-card">
+          <div className="progress-card-header">
+            <h2>Onboarding Progress</h2>
+            <span className={`progress-pill ${completedSteps === steps.length ? 'complete' : ''}`}>
+              {completedSteps === steps.length ? '✓ All Done' : `${completedSteps} / ${steps.length} steps`}
+            </span>
+          </div>
+          <div className="progress-track">
+            <div className="progress-meta">
+              <span>Progress</span>
+              <strong>{Math.round(progressPercent)}%</strong>
+            </div>
+            <div className="pbar-bg">
+              <div className="pbar-fill" style={{ width: `${progressPercent}%` }}></div>
+            </div>
+          </div>
+
+          <div className="steps-timeline">
+
+            {/* Step 1 */}
+            <div className={`timeline-step ${stepClass(profileComplete, completedSteps === 0)}`}>
+              <div className="step-node-wrap">
+                <div className="step-node">
+                  {profileComplete ? <CheckIcon size={14} color="#fff" /> : '1'}
+                </div>
+              </div>
+              <div className="step-body">
+                <div className="step-row">
+                  <div className="step-info">
+                    <div className="step-label">
+                      <h4>Complete Your Profile</h4>
+                      {profileComplete && <span className="step-tag tag-done">Done</span>}
+                      {!profileComplete && completedSteps === 0 && <span className="step-tag tag-active">Active</span>}
+                    </div>
+                    <p>{profileComplete ? 'Profile completed with CGPA and personal details' : 'Add your CGPA, exam scores, and personal details'}</p>
+                  </div>
+                  {!profileComplete && (
+                    <div className="step-actions">
+                      <button className="dash-btn dash-btn-primary dash-btn-sm" onClick={() => navigate('/student-details')}>
+                        Complete Now
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className={`timeline-step ${stepClass(hasCareer, profileComplete && !hasCareer)}`}>
+              <div className="step-node-wrap">
+                <div className="step-node">
+                  {hasCareer ? <CheckIcon size={14} color="#fff" /> : '2'}
+                </div>
+              </div>
+              <div className="step-body">
+                <div className="step-row">
+                  <div className="step-info">
+                    <div className="step-label">
+                      <h4>Choose Your Career Path</h4>
+                      {hasCareer && <span className="step-tag tag-done">Done</span>}
+                      {!hasCareer && profileComplete && <span className="step-tag tag-active">Active</span>}
+                    </div>
+                    <p>{hasCareer ? `Selected: ${studentData.preferences.career}` : 'Explore career fields and pick one that fits you'}</p>
+                  </div>
+                  <div className="step-actions">
+                    <button className={`dash-btn ${hasCareer ? 'dash-btn-outline' : 'dash-btn-primary'} dash-btn-sm`}
+                      onClick={() => navigate('/career-selection')}>
+                      {hasCareer ? 'Change' : 'Select'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className={`timeline-step ${stepClass(hasLocation, hasCareer && !hasLocation)}`}>
+              <div className="step-node-wrap">
+                <div className="step-node">
+                  {hasLocation ? <CheckIcon size={14} color="#fff" /> : '3'}
+                </div>
+              </div>
+              <div className="step-body">
+                <div className="step-row">
+                  <div className="step-info">
+                    <div className="step-label">
+                      <h4>Pick Study Location</h4>
+                      {hasLocation && <span className="step-tag tag-done">Done</span>}
+                      {!hasLocation && hasCareer && <span className="step-tag tag-active">Active</span>}
+                    </div>
+                    <p>{hasLocation ? `Selected: ${studentData.preferences.location}` : 'Choose to study in India or abroad'}</p>
+                  </div>
+                  <div className="step-actions">
+                    <button className={`dash-btn ${hasLocation ? 'dash-btn-outline' : 'dash-btn-primary'} dash-btn-sm`}
+                      onClick={() => navigate('/location-selection')}>
+                      {hasLocation ? 'Change' : 'Select'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 4 */}
+            <div className={`timeline-step ${stepClass(hasAppearedForTest, hasLocation && !hasAppearedForTest)}`}>
+              <div className="step-node-wrap">
+                <div className="step-node">
+                  {hasAppearedForTest ? <CheckIcon size={14} color="#fff" /> : '4'}
+                </div>
+              </div>
+              <div className="step-body">
+                <div className="step-row">
+                  <div className="step-info">
+                    <div className="step-label">
+                      <h4>Take Aptitude Test</h4>
+                      {hasAppearedForTest && <span className="step-tag tag-done">Done</span>}
+                      {!hasAppearedForTest && hasLocation && <span className="step-tag tag-active">Active</span>}
+                    </div>
+                    <p>{hasAppearedForTest ? `Score: ${Math.round(studentData.aptitudeScore)}% — test completed` : '30-minute assessment to gauge your strengths'}</p>
+                  </div>
+                  <div className="step-actions">
+                    {hasAppearedForTest ? (
+                      <>
+                        <button className="dash-btn dash-btn-outline dash-btn-sm" onClick={() => navigate('/test-completion')}>
+                          Result
+                        </button>
+                        <button className="dash-btn dash-btn-purple dash-btn-sm" onClick={() => navigate('/aptitude-test')}>
+                          Retake
+                        </button>
+                      </>
+                    ) : (
+                      <button className="dash-btn dash-btn-primary dash-btn-sm"
+                        onClick={() => navigate('/aptitude-test')} disabled={!profileComplete}>
+                        {profileComplete ? 'Start Test' : 'Complete Profile First'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* ── QUICK ACTIONS ── */}
+        <div className="quick-actions">
+          <div className="qa-card" onClick={() => navigate('/career-roadmap')}>
+            <div className="qa-icon icon-blue"><GraduationCapIcon size={20} /></div>
+            <div className="qa-text">
+              <h4>Career Roadmap</h4>
+              <p>View your personalised career path</p>
+            </div>
+            <span className="qa-arrow">›</span>
+          </div>
+          <div className="qa-card" onClick={() => navigate('/college-list')}>
+            <div className="qa-icon icon-green"><BuildingIcon size={20} /></div>
+            <div className="qa-text">
+              <h4>Browse Colleges</h4>
+              <p>Explore colleges matching your profile</p>
+            </div>
+            <span className="qa-arrow">›</span>
+          </div>
+          <div className="qa-card" onClick={() => navigate('/applications')}>
+            <div className="qa-icon icon-amber"><FileTextIcon size={20} /></div>
+            <div className="qa-text">
+              <h4>My Applications</h4>
+              <p>Track all your college applications</p>
+            </div>
+            <span className="qa-arrow">›</span>
+          </div>
+        </div>
+
       </div>
     </div>
   );

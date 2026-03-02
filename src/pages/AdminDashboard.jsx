@@ -31,7 +31,8 @@ import {
   DownloadIcon,
   BuildingIcon,
   BookOpenIcon,
-  AwardIcon
+  AwardIcon,
+  SearchIcon
 } from '../components/Icons';
 import './AdminDashboard.css';
 import '../components/Modals.css';
@@ -70,6 +71,9 @@ function AdminDashboard() {
   // Question category selection
   const [selectedQuestionCategory, setSelectedQuestionCategory] = useState('all');
 
+  // Admin college search
+  const [adminCollegeSearch, setAdminCollegeSearch] = useState('');
+
   // College form state
   const [collegeForm, setCollegeForm] = useState({
     name: '',
@@ -77,6 +81,7 @@ function AdminDashboard() {
     state: '',
     city: '',
     address: '',
+    types: [],
     type: '',
     fees: '',
     currency: 'INR',
@@ -224,6 +229,7 @@ function AdminDashboard() {
       state: '',
       city: '',
       address: '',
+      types: [],
       type: '',
       fees: '',
       currency: 'INR',
@@ -267,8 +273,11 @@ function AdminDashboard() {
     setLoading(true);
 
     try {
+      const primaryType = (collegeForm.types && collegeForm.types.length > 0) ? collegeForm.types[0] : (collegeForm.type || '');
       const collegeData = {
         ...collegeForm,
+        type: primaryType,
+        types: collegeForm.types && collegeForm.types.length > 0 ? collegeForm.types : (collegeForm.type ? [collegeForm.type] : []),
         fees: parseFloat(collegeForm.fees) || 0,
         ranking: parseInt(collegeForm.ranking) || 0,
         minCGPA: parseFloat(collegeForm.minCGPA) || 0,
@@ -297,13 +306,21 @@ function AdminDashboard() {
   };
 
   const handleEditCollege = (college) => {
+    console.log('Editing college - Full object:', college);
+    console.log('State value:', college.state);
+    console.log('City value:', college.city);
+    console.log('Country value:', college.country);
+    
     setEditingCollege(college.id);
-    setCollegeForm({
+    
+    // Prepare form with all college data
+    const formData = {
       name: college.name || '',
       country: college.country || 'India',
       state: college.state || '',
       city: college.city || '',
       address: college.address || '',
+      types: college.types && college.types.length > 0 ? college.types : (college.type ? [college.type] : []),
       type: college.type || '',
       fees: college.fees?.toString() || '',
       currency: college.currency || 'INR',
@@ -322,8 +339,19 @@ function AdminDashboard() {
       campusSize: college.campusSize || '',
       studentCount: college.studentCount?.toString() || '',
       facultyCount: college.facultyCount?.toString() || ''
-    });
+    };
+    
+    console.log('Form data being set:', formData);
+    setCollegeForm(formData);
     setShowForm(true);
+    
+    // Show notification
+    logInfo('ADMIN', 'Editing college', { collegeId: college.id, collegeName: college.name });
+    
+    // Scroll to top of the page to see the form
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
   };
 
   const handleUpdateCollege = async (e) => {
@@ -331,8 +359,11 @@ function AdminDashboard() {
     setLoading(true);
 
     try {
+      const primaryTypeU = (collegeForm.types && collegeForm.types.length > 0) ? collegeForm.types[0] : (collegeForm.type || '');
       const collegeData = {
         ...collegeForm,
+        type: primaryTypeU,
+        types: collegeForm.types && collegeForm.types.length > 0 ? collegeForm.types : (collegeForm.type ? [collegeForm.type] : []),
         fees: parseFloat(collegeForm.fees) || 0,
         ranking: parseInt(collegeForm.ranking) || 0,
         minCGPA: parseFloat(collegeForm.minCGPA) || 0,
@@ -732,14 +763,30 @@ function AdminDashboard() {
             </div>
 
             {showForm && (
-              <div className="card form-card">
-                <h3>
-                  {editingCollege ? (
-                    <><EditIcon size={20} /> Edit College</>
-                  ) : (
-                    <><GraduationCapIcon size={20} /> Add New College</>
+              <div className="card form-card" style={{ 
+                border: editingCollege ? '3px solid #3b82f6' : '1px solid #e5e7eb',
+                boxShadow: editingCollege ? '0 4px 12px rgba(59, 130, 246, 0.2)' : 'var(--shadow-md)'
+              }}>
+                <div style={{ 
+                  background: editingCollege ? 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                  color: 'white',
+                  padding: '1rem 1.5rem',
+                  margin: '-1.5rem -1.5rem 1.5rem',
+                  borderRadius: '0.75rem 0.75rem 0 0'
+                }}>
+                  <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.3rem' }}>
+                    {editingCollege ? (
+                      <><EditIcon size={24} /> Editing College</>
+                    ) : (
+                      <><GraduationCapIcon size={24} /> Add New College</>
+                    )}
+                  </h3>
+                  {editingCollege && (
+                    <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', opacity: 0.9 }}>
+                      Update the information below and click "Update College"
+                    </p>
                   )}
-                </h3>
+                </div>
                 <form onSubmit={editingCollege ? handleUpdateCollege : handleAddCollege}>
                   
                   {/* Basic Information Section */}
@@ -761,27 +808,27 @@ function AdminDashboard() {
                       </div>
 
                       <div className="form-group">
-                        <label className="form-label">Type *</label>
-                        <select
-                          className="form-select"
-                          value={collegeForm.type}
-                          onChange={(e) => setCollegeForm({ ...collegeForm, type: e.target.value })}
-                          required
-                        >
-                          <option value="">Select Type</option>
-                          <option value="Engineering">Engineering</option>
-                          <option value="Management">Management</option>
-                          <option value="Medical">Medical</option>
-                          <option value="Law">Law</option>
-                          <option value="Science">Science</option>
-                          <option value="Arts">Arts</option>
-                          <option value="Commerce">Commerce</option>
-                          <option value="Design">Design</option>
-                          <option value="Media">Media</option>
-                          <option value="Agriculture">Agriculture</option>
-                          <option value="Pharmacy">Pharmacy</option>
-                          <option value="Other">Other</option>
-                        </select>
+                        <label className="form-label">Type(s) * <span style={{fontSize:'0.75rem',fontWeight:400,color:'#6b7280'}}>(select all that apply)</span></label>
+                        <div style={{display:'flex',flexWrap:'wrap',gap:'0.5rem',padding:'0.5rem',border:'1px solid #d1d5db',borderRadius:'0.5rem',background:'#fff'}}>
+                          {['Engineering','Management','Medical','Law','Science','Arts','Commerce','Design','Media','Agriculture','Pharmacy','Technology','Other'].map(t => {
+                            const checked = (collegeForm.types || []).includes(t);
+                            return (
+                              <label key={t} style={{display:'flex',alignItems:'center',gap:'0.35rem',padding:'0.3rem 0.7rem',borderRadius:'2rem',border:`1.5px solid ${checked ? '#3b82f6' : '#e5e7eb'}`,background: checked ? '#eff6ff' : '#f9fafb',cursor:'pointer',fontSize:'0.82rem',fontWeight: checked ? 600 : 400,color: checked ? '#1d4ed8' : '#374151',transition:'all 0.15s'}}>
+                                <input
+                                  type="checkbox"
+                                  checked={checked}
+                                  style={{display:'none'}}
+                                  onChange={() => {
+                                    const cur = collegeForm.types || [];
+                                    setCollegeForm({...collegeForm, types: checked ? cur.filter(x => x !== t) : [...cur, t]});
+                                  }}
+                                />
+                                {checked ? '✓ ' : ''}{t}
+                              </label>
+                            );
+                          })}
+                        </div>
+                        {(collegeForm.types || []).length === 0 && <p style={{fontSize:'0.75rem',color:'#ef4444',marginTop:'0.25rem'}}>Please select at least one type</p>}
                       </div>
 
                       <div className="form-group">
@@ -1116,8 +1163,39 @@ function AdminDashboard() {
 
             {loading && <div className="spinner"></div>}
 
+            {/* Search bar */}
+            <div style={{marginBottom:'1.25rem',position:'relative'}}>
+              <span style={{position:'absolute',left:'0.875rem',top:'50%',transform:'translateY(-50%)',color:'#9ca3af',pointerEvents:'none',display:'flex',alignItems:'center'}}>
+                <SearchIcon size={16} color="#9ca3af" />
+              </span>
+              <input
+                type="text"
+                className="form-input"
+                style={{paddingLeft:'2.5rem',borderRadius:'0.625rem',border:'1.5px solid #e5e7eb',background:'#f9fafb'}}
+                placeholder="Search colleges by name, type, city, state…"
+                value={adminCollegeSearch}
+                onChange={e => setAdminCollegeSearch(e.target.value)}
+              />
+              {adminCollegeSearch && (
+                <button onClick={() => setAdminCollegeSearch('')} style={{position:'absolute',right:'0.875rem',top:'50%',transform:'translateY(-50%)',background:'none',border:'none',cursor:'pointer',color:'#6b7280',display:'flex',alignItems:'center'}}>
+                  <CloseIcon size={14} color="#6b7280" />
+                </button>
+              )}
+            </div>
+
             <div className="grid grid-2">
-              {colleges.map(college => (
+              {colleges.filter(college => {
+                if (!adminCollegeSearch.trim()) return true;
+                const q = adminCollegeSearch.toLowerCase();
+                const allTypes = [...(college.types || []), college.type || ''].join(' ').toLowerCase();
+                return (
+                  (college.name || '').toLowerCase().includes(q) ||
+                  (college.city || '').toLowerCase().includes(q) ||
+                  (college.state || '').toLowerCase().includes(q) ||
+                  (college.country || '').toLowerCase().includes(q) ||
+                  allTypes.includes(q)
+                );
+              }).map(college => (
                 <div key={college.id} className="card college-detail-card">
                   <div className="card-header">
                     <h3>{college.name}</h3>
@@ -1136,7 +1214,11 @@ function AdminDashboard() {
                     <div className="college-info-section">
                       <h4><GraduationCapIcon size={16} /> Academic Info</h4>
                       <div className="info-grid">
-                        <p><strong>Type:</strong> {college.type}</p>
+                        <p><strong>Type:</strong>{' '}
+                          {(college.types && college.types.length > 0 ? college.types : (college.type ? [college.type] : [])).map(t => (
+                            <span key={t} style={{display:'inline-block',background:'#eff6ff',color:'#1d4ed8',fontSize:'0.72rem',fontWeight:600,padding:'0.1rem 0.5rem',borderRadius:'0.25rem',marginRight:'0.25rem',marginBottom:'0.2rem'}}>{t}</span>
+                          ))}
+                        </p>
                         <p><strong>Min CGPA:</strong> {college.minCGPA}</p>
                         {college.establishedYear && (
                           <p><strong>Founded:</strong> {college.establishedYear}</p>
@@ -1198,20 +1280,20 @@ function AdminDashboard() {
                       </div>
                     )}
 
-                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid #e9ecef' }}>
+                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '2px solid #e5e7eb' }}>
                       <button
                         className="btn btn-primary"
                         onClick={() => handleEditCollege(college)}
-                        style={{ flex: 1 }}
+                        style={{ flex: 1, fontSize: '0.95rem', padding: '0.75rem 1rem' }}
                       >
-                        <EditIcon size={16} /> Edit
+                        <EditIcon size={18} /> Edit College
                       </button>
                       <button
                         className="btn btn-danger"
                         onClick={() => handleDeleteCollege(college.id, college.name)}
-                        style={{ flex: 1 }}
+                        style={{ flex: 1, fontSize: '0.95rem', padding: '0.75rem 1rem' }}
                       >
-                        <TrashIcon size={16} /> Delete
+                        <TrashIcon size={18} /> Delete
                       </button>
                     </div>
                   </div>
