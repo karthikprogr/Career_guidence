@@ -15,6 +15,7 @@ function CollegeList() {
   const [selectedForComparison, setSelectedForComparison] = useState([]);
   const [availableLocations, setAvailableLocations] = useState([]);
   const [availableTypes, setAvailableTypes] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     location: 'all',
     minFees: '',
@@ -30,7 +31,7 @@ function CollegeList() {
 
   useEffect(() => {
     applyFilters();
-  }, [colleges, filters, studentData]);
+  }, [colleges, filters, studentData, searchTerm]);
 
   const fetchData = async () => {
     try {
@@ -160,6 +161,18 @@ function CollegeList() {
       });
     }
 
+    // Filter by search term (name, city, state, country)
+    if (searchTerm.trim()) {
+      const q = searchTerm.toLowerCase();
+      filtered = filtered.filter(college =>
+        (college.name || '').toLowerCase().includes(q) ||
+        (college.city || '').toLowerCase().includes(q) ||
+        (college.state || '').toLowerCase().includes(q) ||
+        (college.country || '').toLowerCase().includes(q) ||
+        (college.type || '').toLowerCase().includes(q)
+      );
+    }
+
     // Sort by ranking
     filtered.sort((a, b) => a.ranking - b.ranking);
 
@@ -175,6 +188,7 @@ function CollegeList() {
   };
 
   const resetFilters = () => {
+    setSearchTerm('');
     setFilters({
       location: 'all',
       minFees: '',
@@ -223,6 +237,28 @@ function CollegeList() {
               : ''}
             {' '}matching your criteria
           </p>
+        </div>
+
+        {/* Search Bar */}
+        <div style={{position:'relative',marginBottom:'1.5rem'}}>
+          <span style={{position:'absolute',left:'0.875rem',top:'50%',transform:'translateY(-50%)',color:'#6b7280',display:'flex',alignItems:'center',pointerEvents:'none'}}>
+            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </span>
+          <input
+            type="text"
+            placeholder="Search colleges by name, city, state, type…"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            style={{width:'100%',padding:'0.75rem 2.5rem 0.75rem 2.5rem',borderRadius:'0.625rem',border:'1.5px solid #374151',background:'#1f2937',color:'#f9fafb',fontSize:'0.95rem',outline:'none',boxSizing:'border-box'}}
+          />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm('')}
+              style={{position:'absolute',right:'0.875rem',top:'50%',transform:'translateY(-50%)',background:'none',border:'none',cursor:'pointer',color:'#6b7280',display:'flex',alignItems:'center'}}
+            >
+              <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          )}
         </div>
 
         {/* Eligibility Info */}
