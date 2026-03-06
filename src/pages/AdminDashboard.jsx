@@ -1211,7 +1211,7 @@ function AdminDashboard() {
               <input
                 type="text"
                 className="form-input"
-                style={{paddingLeft:'2.5rem',borderRadius:'0.625rem',border:'1.5px solid #e5e7eb',background:'#f9fafb'}}
+                style={{paddingLeft:'2.5rem',borderRadius:'0.625rem',border:'1.5px solid #374151',background:'#1f2937',color:'#f9fafb'}}
                 placeholder="Search colleges by name, type, city, state…"
                 value={adminCollegeSearch}
                 onChange={e => setAdminCollegeSearch(e.target.value)}
