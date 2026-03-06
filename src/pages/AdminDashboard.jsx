@@ -1269,6 +1269,7 @@ function AdminDashboard() {
                             : <span style={{color:'#6b7280',fontSize:'0.8rem'}}>None</span>
                           }
                         </p>
+                        {college.establishedYear && (
                           <p><strong>Founded:</strong> {college.establishedYear}</p>
                         )}
                         {college.accreditation && (
