@@ -201,6 +201,14 @@ function CollegeDetails() {
             </div>
           )}
 
+          {/* Rules & Regulations */}
+          {college.rulesAndRegulations && (
+            <div className="college-section">
+              <h2><FileTextIcon size={24} /> Rules & Regulations</h2>
+              <p>{college.rulesAndRegulations}</p>
+            </div>
+          )}
+
           {/* Contact Information */}
           {(college.contact || college.email || college.website) && (
             <div className="college-section">

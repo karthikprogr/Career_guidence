@@ -93,6 +93,7 @@ function AdminDashboard() {
     description: '',
     facilities: '',
     scholarships: '',
+    rulesAndRegulations: '',
     website: '',
     email: '',
     phone: '',
@@ -243,6 +244,7 @@ function AdminDashboard() {
       description: '',
       facilities: '',
       scholarships: '',
+      rulesAndRegulations: '',
       website: '',
       email: '',
       phone: '',
@@ -338,6 +340,7 @@ function AdminDashboard() {
       description: college.description || '',
       facilities: college.facilities || '',
       scholarships: college.scholarships || '',
+      rulesAndRegulations: college.rulesAndRegulations || '',
       website: college.website || '',
       email: college.email || '',
       phone: college.phone || '',
@@ -1171,6 +1174,17 @@ function AdminDashboard() {
                         placeholder="e.g., Merit-based scholarships, Need-based aid, Sports scholarships"
                         value={collegeForm.scholarships}
                         onChange={(e) => setCollegeForm({ ...collegeForm, scholarships: e.target.value })}
+                      ></textarea>
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">Rules & Regulations</label>
+                      <textarea
+                        className="form-textarea"
+                        rows="2"
+                        placeholder="e.g., Attendance policy, Dress code, Anti-ragging rules, Code of conduct"
+                        value={collegeForm.rulesAndRegulations}
+                        onChange={(e) => setCollegeForm({ ...collegeForm, rulesAndRegulations: e.target.value })}
                       ></textarea>
                     </div>
                   </div>
