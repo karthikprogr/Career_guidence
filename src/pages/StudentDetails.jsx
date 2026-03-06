@@ -352,24 +352,24 @@ function StudentDetails() {
 
               <div className="sd-grid-2">
                 <div className="form-group">
-                  <label className="form-label">JEE Score</label>
-                  <input type="text" className="form-input" name="exam_jee"
-                    value={formData.examScores.jee} onChange={handleChange} placeholder="e.g., 95 percentile" />
+                  <label className="form-label">JEE Score <span style={{fontWeight:400,color:'#64748b'}}>(percentile, 0–100)</span></label>
+                  <input type="number" min="0" max="100" step="0.01" className="form-input" name="exam_jee"
+                    value={formData.examScores.jee} onChange={handleChange} placeholder="e.g., 95.5" />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">NEET Score</label>
-                  <input type="text" className="form-input" name="exam_neet"
-                    value={formData.examScores.neet} onChange={handleChange} placeholder="e.g., 600/720" />
+                  <label className="form-label">NEET Score <span style={{fontWeight:400,color:'#64748b'}}>(marks, 0–720)</span></label>
+                  <input type="number" min="0" max="720" step="1" className="form-input" name="exam_neet"
+                    value={formData.examScores.neet} onChange={handleChange} placeholder="e.g., 620" />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">CAT Score</label>
-                  <input type="text" className="form-input" name="exam_cat"
-                    value={formData.examScores.cat} onChange={handleChange} placeholder="e.g., 98 percentile" />
+                  <label className="form-label">CAT Score <span style={{fontWeight:400,color:'#64748b'}}>(percentile, 0–100)</span></label>
+                  <input type="number" min="0" max="100" step="0.01" className="form-input" name="exam_cat"
+                    value={formData.examScores.cat} onChange={handleChange} placeholder="e.g., 98.5" />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">GMAT Score</label>
-                  <input type="text" className="form-input" name="exam_gmat"
-                    value={formData.examScores.gmat} onChange={handleChange} placeholder="e.g., 700/800" />
+                  <label className="form-label">GMAT Score <span style={{fontWeight:400,color:'#64748b'}}>(200–800)</span></label>
+                  <input type="number" min="200" max="800" step="1" className="form-input" name="exam_gmat"
+                    value={formData.examScores.gmat} onChange={handleChange} placeholder="e.g., 710" />
                 </div>
               </div>
 

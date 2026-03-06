@@ -20,7 +20,8 @@ function CollegeList() {
     minFees: '',
     maxFees: '',
     minRanking: '',
-    type: 'all'
+    type: 'all',
+    examMatch: false
   });
 
   useEffect(() => {
@@ -135,6 +136,19 @@ function CollegeList() {
       }));
     }
 
+    // Filter by entrance exam score match
+    if (filters.examMatch && studentData?.examScores) {
+      const scoreMap = { JEE: 'jee', NEET: 'neet', CAT: 'cat', GMAT: 'gmat' };
+      filtered = filtered.filter(college => {
+        const exam = college.requiredExam;
+        if (!exam || exam === 'None') return true;
+        const field = scoreMap[exam];
+        if (!field) return true;
+        const studentScore = parseFloat(studentData.examScores[field] || 0);
+        return studentScore >= (college.minimumExamScore || 0);
+      });
+    }
+
     // Sort by ranking
     filtered.sort((a, b) => a.ranking - b.ranking);
 
@@ -142,9 +156,10 @@ function CollegeList() {
   };
 
   const handleFilterChange = (e) => {
+    const { name, type, checked, value } = e.target;
     setFilters({
       ...filters,
-      [e.target.name]: e.target.value
+      [name]: type === 'checkbox' ? checked : value
     });
   };
 
@@ -154,7 +169,8 @@ function CollegeList() {
       minFees: '',
       maxFees: '',
       minRanking: '',
-      type: 'all'
+      type: 'all',
+      examMatch: false
     });
   };
 
@@ -202,6 +218,17 @@ function CollegeList() {
             )}
             {studentData.preferences?.location && (
               <p>Preferred Location: <strong>{studentData.preferences.location}</strong></p>
+            )}
+            {studentData.examScores && (
+              <div style={{marginTop:'0.5rem', display:'flex', flexWrap:'wrap', gap:'0.4rem'}}>
+                {[['JEE','jee','percentile'],['NEET','neet','marks'],['CAT','cat','percentile'],['GMAT','gmat','score']].map(([label, field, unit]) =>
+                  studentData.examScores[field] ? (
+                    <span key={field} style={{background:'#1e293b',color:'#93c5fd',fontSize:'0.75rem',padding:'0.2rem 0.55rem',borderRadius:'0.3rem',fontWeight:600}}>
+                      {label}: {studentData.examScores[field]} {unit}
+                    </span>
+                  ) : null
+                )}
+              </div>
             )}
           </div>
         )}
@@ -276,6 +303,22 @@ function CollegeList() {
               />
             </div>
 
+            {studentData?.examScores && (
+              <div className="form-group" style={{display:'flex',alignItems:'center',gap:'0.5rem',paddingTop:'1.5rem'}}>
+                <input
+                  type="checkbox"
+                  id="examMatch"
+                  name="examMatch"
+                  checked={filters.examMatch}
+                  onChange={handleFilterChange}
+                  style={{width:'1.1rem',height:'1.1rem',cursor:'pointer',accentColor:'#3b82f6'}}
+                />
+                <label htmlFor="examMatch" className="form-label" style={{margin:0,cursor:'pointer',userSelect:'none'}}>
+                  Only colleges I qualify for (exam score)
+                </label>
+              </div>
+            )}
+
             <div className="form-group">
               <button className="btn btn-secondary" onClick={resetFilters}>
                 Reset Filters
@@ -322,7 +365,7 @@ function CollegeList() {
                   onChange={() => toggleCollegeForComparison(college.id)}
                   title="Select for comparison"
                 />
-                <CollegeCard college={college} />
+                <CollegeCard college={college} studentExamScores={studentData?.examScores} />
               </div>
             ))}
           </div>

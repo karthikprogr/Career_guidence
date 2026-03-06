@@ -63,6 +63,14 @@ function CollegeDetails() {
 
   const isEligible = studentData?.cgpa >= college.minCGPA;
 
+  const EXAM_UNIT = { JEE: 'percentile', NEET: 'marks', CAT: 'percentile', GMAT: 'score' };
+  const EXAM_FIELD = { JEE: 'jee', NEET: 'neet', CAT: 'cat', GMAT: 'gmat' };
+  const examRequired = college.requiredExam && college.requiredExam !== 'None';
+  const studentExamScore = examRequired
+    ? parseFloat(studentData?.examScores?.[EXAM_FIELD[college.requiredExam]] || 0)
+    : null;
+  const examEligible = examRequired ? studentExamScore >= (college.minimumExamScore || 0) : true;
+
   return (
     <div className="college-details-page">
       <div className="container">
@@ -143,6 +151,28 @@ function CollegeDetails() {
               <div>
                 <p className="info-label">Placement Rate</p>
                 <p className="info-value">{college.placementRate || 'N/A'}%</p>
+              </div>
+            </div>
+
+            <div className="info-card">
+              <div className="info-icon"><FileTextIcon size={32} /></div>
+              <div>
+                <p className="info-label">Entrance Exam</p>
+                <p className="info-value" style={{
+                  color: examRequired
+                    ? (studentData ? (examEligible ? '#4ade80' : '#f87171') : undefined)
+                    : '#94a3b8'
+                }}>
+                  {examRequired
+                    ? `${college.requiredExam} ≥ ${college.minimumExamScore} ${EXAM_UNIT[college.requiredExam] || ''}`
+                    : 'No entrance exam'}
+                  {examRequired && studentData && (examEligible ? ' ✓' : ' ✗')}
+                </p>
+                {examRequired && studentData && !studentExamScore && (
+                  <p style={{fontSize:'0.7rem',color:'#f59e0b',marginTop:'0.15rem'}}>
+                    Add your {college.requiredExam} score in profile
+                  </p>
+                )}
               </div>
             </div>
           </div>

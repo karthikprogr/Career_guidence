@@ -89,10 +89,25 @@ function CollegeApplication() {
       }
     }
 
-    // Check eligibility
+    // Check CGPA eligibility
     if (studentData?.cgpa < college?.minCGPA) {
       alert(`Your CGPA (${studentData.cgpa}) does not meet the minimum requirement (${college.minCGPA})`);
       return false;
+    }
+
+    // Check entrance exam eligibility (warn only, don't block)
+    if (college.requiredExam && college.requiredExam !== 'None') {
+      const examFieldMap = { JEE: 'jee', NEET: 'neet', CAT: 'cat', GMAT: 'gmat' };
+      const field = examFieldMap[college.requiredExam];
+      if (field) {
+        const studentScore = parseFloat(studentData?.examScores?.[field] || 0);
+        if (studentScore > 0 && studentScore < college.minimumExamScore) {
+          const confirmed = window.confirm(
+            `Warning: Your ${college.requiredExam} score (${studentScore}) is below the college's minimum (${college.minimumExamScore}).\n\nDo you still want to submit the application?`
+          );
+          if (!confirmed) return false;
+        }
+      }
     }
 
     return true;
@@ -169,6 +184,10 @@ function CollegeApplication() {
   }
 
   const isEligible = studentData?.cgpa >= college.minCGPA;
+  const EXAM_FIELD = { JEE: 'jee', NEET: 'neet', CAT: 'cat', GMAT: 'gmat' };
+  const examRequired = college.requiredExam && college.requiredExam !== 'None';
+  const studentExamScore = examRequired ? parseFloat(studentData?.examScores?.[EXAM_FIELD[college.requiredExam]] || 0) : null;
+  const examEligible = examRequired ? (studentExamScore >= (college.minimumExamScore || 0)) : true;
 
   return (
     <div className="college-application-page">
@@ -199,6 +218,12 @@ function CollegeApplication() {
               <div>
                 <h3>You are eligible to apply!</h3>
                 <p>Your CGPA ({studentData.cgpa}) meets the minimum requirement ({college.minCGPA})</p>
+                {examRequired && (
+                  <p style={{marginTop:'0.25rem', color: examEligible ? '#4ade80' : '#fbbf24'}}>
+                    {college.requiredExam} score: {studentExamScore > 0 ? studentExamScore : 'Not entered'}{' '}
+                    {studentExamScore > 0 ? (examEligible ? `✓ (min ${college.minimumExamScore})` : `⚠ below min ${college.minimumExamScore}`) : `— add in your profile`}
+                  </p>
+                )}
               </div>
             </>
           ) : (

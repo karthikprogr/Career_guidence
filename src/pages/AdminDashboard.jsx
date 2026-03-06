@@ -88,6 +88,8 @@ function AdminDashboard() {
     ranking: '',
     minCGPA: '',
     placementRate: '',
+    requiredExam: 'None',
+    minimumExamScore: '',
     description: '',
     facilities: '',
     scholarships: '',
@@ -236,6 +238,8 @@ function AdminDashboard() {
       ranking: '',
       minCGPA: '',
       placementRate: '',
+      requiredExam: 'None',
+      minimumExamScore: '',
       description: '',
       facilities: '',
       scholarships: '',
@@ -282,6 +286,8 @@ function AdminDashboard() {
         ranking: parseInt(collegeForm.ranking) || 0,
         minCGPA: parseFloat(collegeForm.minCGPA) || 0,
         placementRate: parseFloat(collegeForm.placementRate) || 0,
+        requiredExam: collegeForm.requiredExam || 'None',
+        minimumExamScore: parseFloat(collegeForm.minimumExamScore) || 0,
         establishedYear: collegeForm.establishedYear ? parseInt(collegeForm.establishedYear) : null,
         studentCount: collegeForm.studentCount ? parseInt(collegeForm.studentCount) : null,
         facultyCount: collegeForm.facultyCount ? parseInt(collegeForm.facultyCount) : null,
@@ -368,6 +374,8 @@ function AdminDashboard() {
         ranking: parseInt(collegeForm.ranking) || 0,
         minCGPA: parseFloat(collegeForm.minCGPA) || 0,
         placementRate: parseFloat(collegeForm.placementRate) || 0,
+        requiredExam: collegeForm.requiredExam || 'None',
+        minimumExamScore: parseFloat(collegeForm.minimumExamScore) || 0,
         establishedYear: collegeForm.establishedYear ? parseInt(collegeForm.establishedYear) : null,
         studentCount: collegeForm.studentCount ? parseInt(collegeForm.studentCount) : null,
         facultyCount: collegeForm.facultyCount ? parseInt(collegeForm.facultyCount) : null,
@@ -1030,6 +1038,36 @@ function AdminDashboard() {
                           max="100"
                         />
                       </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Required Entrance Exam</label>
+                        <select
+                          className="form-select"
+                          value={collegeForm.requiredExam}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, requiredExam: e.target.value })}
+                        >
+                          <option value="None">None / No entrance exam</option>
+                          <option value="JEE">JEE (percentile)</option>
+                          <option value="NEET">NEET (marks out of 720)</option>
+                          <option value="CAT">CAT (percentile)</option>
+                          <option value="GMAT">GMAT (score 200–800)</option>
+                        </select>
+                      </div>
+
+                      {collegeForm.requiredExam && collegeForm.requiredExam !== 'None' && (
+                        <div className="form-group">
+                          <label className="form-label">Minimum Exam Score</label>
+                          <input
+                            type="number"
+                            step="1"
+                            className="form-input"
+                            value={collegeForm.minimumExamScore}
+                            onChange={(e) => setCollegeForm({ ...collegeForm, minimumExamScore: e.target.value })}
+                            placeholder={collegeForm.requiredExam === 'NEET' ? 'e.g., 600' : 'e.g., 95'}
+                            min="0"
+                          />
+                        </div>
+                      )}
 
                       <div className="form-group">
                         <label className="form-label">Accreditation</label>
