@@ -333,6 +333,8 @@ function AdminDashboard() {
       ranking: college.ranking?.toString() || '',
       minCGPA: college.minCGPA?.toString() || '',
       placementRate: college.placementRate?.toString() || '',
+      requiredExam: college.requiredExam || 'None',
+      minimumExamScore: college.minimumExamScore?.toString() || '',
       description: college.description || '',
       facilities: college.facilities || '',
       scholarships: college.scholarships || '',
@@ -1258,7 +1260,15 @@ function AdminDashboard() {
                           ))}
                         </p>
                         <p><strong>Min CGPA:</strong> {college.minCGPA}</p>
-                        {college.establishedYear && (
+                        <p>
+                          <strong>Entrance Exam:</strong>{' '}
+                          {college.requiredExam && college.requiredExam !== 'None'
+                            ? <span style={{background:'#1e40af',color:'#bfdbfe',fontSize:'0.72rem',fontWeight:600,padding:'0.1rem 0.5rem',borderRadius:'0.25rem'}}>
+                                {college.requiredExam} ≥ {college.minimumExamScore}
+                              </span>
+                            : <span style={{color:'#6b7280',fontSize:'0.8rem'}}>None</span>
+                          }
+                        </p>
                           <p><strong>Founded:</strong> {college.establishedYear}</p>
                         )}
                         {college.accreditation && (
