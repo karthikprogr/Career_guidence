@@ -16,6 +16,7 @@ function CollegeList() {
   const [availableLocations, setAvailableLocations] = useState([]);
   const [availableTypes, setAvailableTypes] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCareer, setSelectedCareer] = useState('');
   const [filters, setFilters] = useState({
     location: 'all',
     minFees: '',
@@ -31,14 +32,19 @@ function CollegeList() {
 
   useEffect(() => {
     applyFilters();
-  }, [colleges, filters, studentData, searchTerm]);
+  }, [colleges, filters, studentData, searchTerm, selectedCareer]);
 
   const fetchData = async () => {
     try {
       // Fetch student data
       const studentDoc = await getDoc(doc(db, 'students', auth.currentUser.uid));
       if (studentDoc.exists()) {
-        setStudentData(studentDoc.data());
+        const data = studentDoc.data();
+        setStudentData(data);
+        // Pre-select student's saved career in the dropdown
+        if (data?.preferences?.career) {
+          setSelectedCareer(data.preferences.career);
+        }
       }
 
       // Fetch colleges
@@ -83,10 +89,10 @@ function CollegeList() {
       return;
     }
 
-    // Auto-filter by student's career preference (if set and user hasn't manually picked a type)
-    const studentCareer = studentData?.preferences?.career;
-    if (studentCareer && filters.type === 'all') {
-      const careerLower = studentCareer.toLowerCase();
+    // Career filter: use selectedCareer dropdown if set, else fall back to student's saved career (only when type is 'all')
+    const activeCareer = selectedCareer || (filters.type === 'all' ? (studentData?.preferences?.career || '') : '');
+    if (activeCareer) {
+      const careerLower = activeCareer.toLowerCase();
       filtered = filtered.filter(college => {
         const singleType = (college.type || '').toLowerCase();
         const multiTypes = (college.types || []).map(t => t.toLowerCase());
@@ -189,6 +195,7 @@ function CollegeList() {
 
   const resetFilters = () => {
     setSearchTerm('');
+    setSelectedCareer(studentData?.preferences?.career || '');
     setFilters({
       location: 'all',
       minFees: '',
@@ -232,8 +239,8 @@ function CollegeList() {
           <h1>Available Colleges</h1>
           <p>
             Showing {filteredColleges.length} college{filteredColleges.length !== 1 ? 's' : ''}
-            {studentData?.preferences?.career && filters.type === 'all'
-              ? ` in ${studentData.preferences.career.charAt(0).toUpperCase() + studentData.preferences.career.slice(1)}`
+            {(selectedCareer || (filters.type === 'all' && studentData?.preferences?.career))
+              ? ` in ${(selectedCareer || studentData.preferences.career).charAt(0).toUpperCase() + (selectedCareer || studentData.preferences.career).slice(1)}`
               : ''}
             {' '}matching your criteria
           </p>
@@ -290,6 +297,25 @@ function CollegeList() {
         <div className="filters-section">
           <h3>Filters</h3>
           <div className="filters-grid">
+            <div className="form-group">
+              <label className="form-label">Career</label>
+              <select
+                className="form-select"
+                value={selectedCareer}
+                onChange={e => setSelectedCareer(e.target.value)}
+              >
+                <option value="">All Careers</option>
+                <option value="engineering">Engineering</option>
+                <option value="management">Management</option>
+                <option value="medical">Medical</option>
+                <option value="law">Law</option>
+                <option value="science">Science</option>
+                <option value="arts">Arts</option>
+                <option value="commerce">Commerce</option>
+                <option value="pharmacy">Pharmacy</option>
+              </select>
+            </div>
+
             <div className="form-group">
               <label className="form-label">Location</label>
               <select
