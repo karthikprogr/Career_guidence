@@ -82,6 +82,17 @@ function CollegeList() {
       return;
     }
 
+    // Auto-filter by student's career preference (if set and user hasn't manually picked a type)
+    const studentCareer = studentData?.preferences?.career;
+    if (studentCareer && filters.type === 'all') {
+      const careerLower = studentCareer.toLowerCase();
+      filtered = filtered.filter(college => {
+        const singleType = (college.type || '').toLowerCase();
+        const multiTypes = (college.types || []).map(t => t.toLowerCase());
+        return singleType === careerLower || multiTypes.includes(careerLower);
+      });
+    }
+
     // Filter by location — check city, state, country, and combined location field
     if (filters.location !== 'all') {
       const loc = filters.location.toLowerCase();
@@ -205,7 +216,13 @@ function CollegeList() {
       <div className="container">
         <div className="page-header">
           <h1>Available Colleges</h1>
-          <p>Showing {filteredColleges.length} colleges matching your criteria</p>
+          <p>
+            Showing {filteredColleges.length} college{filteredColleges.length !== 1 ? 's' : ''}
+            {studentData?.preferences?.career && filters.type === 'all'
+              ? ` in ${studentData.preferences.career.charAt(0).toUpperCase() + studentData.preferences.career.slice(1)}`
+              : ''}
+            {' '}matching your criteria
+          </p>
         </div>
 
         {/* Eligibility Info */}
