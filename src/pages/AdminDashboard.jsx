@@ -1260,22 +1260,24 @@ function AdminDashboard() {
                           ))}
                         </p>
                         <p><strong>Min CGPA:</strong> {college.minCGPA}</p>
-                        <p>
-                          <strong>Entrance Exam:</strong>{' '}
-                          {college.requiredExam && college.requiredExam !== 'None'
-                            ? <span style={{background:'#1e40af',color:'#bfdbfe',fontSize:'0.72rem',fontWeight:600,padding:'0.1rem 0.5rem',borderRadius:'0.25rem'}}>
-                                {college.requiredExam} ≥ {college.minimumExamScore}
-                              </span>
-                            : <span style={{color:'#6b7280',fontSize:'0.8rem'}}>None</span>
-                          }
-                        </p>
                         {college.establishedYear && (
                           <p><strong>Founded:</strong> {college.establishedYear}</p>
                         )}
-                        {college.accreditation && (
-                          <p><strong>Accreditation:</strong> {college.accreditation}</p>
-                        )}
                       </div>
+                      <p style={{fontSize:'0.85rem',color:'#94a3b8',marginTop:'0.35rem'}}>
+                        <strong>Entrance Exam:</strong>{' '}
+                        {college.requiredExam && college.requiredExam !== 'None'
+                          ? <span style={{background:'#1e40af',color:'#bfdbfe',fontSize:'0.72rem',fontWeight:600,padding:'0.15rem 0.55rem',borderRadius:'0.25rem'}}>
+                              {college.requiredExam} ≥ {college.minimumExamScore}
+                            </span>
+                          : <span style={{color:'#6b7280',fontSize:'0.8rem'}}>None</span>
+                        }
+                      </p>
+                      {college.accreditation && (
+                        <p style={{fontSize:'0.82rem',color:'#94a3b8',marginTop:'0.3rem',lineHeight:'1.4'}}>
+                          <strong>Accreditation:</strong> {college.accreditation}
+                        </p>
+                      )}
                     </div>
 
                     <div className="college-info-section">
